@@ -1,0 +1,22 @@
+{
+  "name": "ali-promo-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ali Al-Ali brand promo, 9:16 vertical, light/airy kinetic typography, rendered with Remotion.",
+  "scripts": {
+    "dev": "remotion preview src/index.ts",
+    "build": "remotion render src/index.ts AliPromo out/ali-promo-9x16.mp4",
+    "build:4k": "remotion render src/index.ts AliPromo out/ali-promo-9x16-4k.mp4 --height=3840 --width=2160"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.380",
+    "@remotion/google-fonts": "4.0.380",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.380"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.7.2"
+  }
+}

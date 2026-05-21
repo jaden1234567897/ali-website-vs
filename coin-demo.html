@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coin Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    font-family: system-ui, sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  /* Fixed WebGL canvas behind everything */
+  #coin-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  /* Tall scroll container to drive animation */
+  .scroll-driver {
+    height: 500vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Sticky section labels */
+  .label {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    padding: 0 24px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .label.visible { opacity: 1; }
+  .label h1 {
+    font-size: clamp(42px, 9vw, 110px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .label p {
+    margin-top: 14px;
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="coin-canvas"></canvas>
+
+<div class="scroll-driver">
+  <div class="label" id="lbl-enter">
+    <h1>Scroll</h1>
+    <p>to explore</p>
+  </div>
+</div>
+
+<!-- Three.js + GLTFLoader via CDN -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three'
+import { GLTFLoader }     from 'three/addons/loaders/GLTFLoader.js'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+
+// ─── Scene setup ────────────────────────────────────────────────────────────
+const canvas   = document.getElementById('coin-canvas')
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
+renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.outputColorSpace = THREE.SRGBColorSpace
+renderer.toneMapping        = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 1.4
+
+const scene  = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100)
+camera.position.set(0, 0, 7)
+
+// ─── Environment map (makes metallic PBR materials visible) ─────────────────
+const pmremGen = new THREE.PMREMGenerator(renderer)
+pmremGen.compileEquirectangularShader()
+const envTexture = pmremGen.fromScene(new RoomEnvironment(renderer), 0.04).texture
+scene.environment = envTexture
+pmremGen.dispose()
+
+// Lighting — cool cyan / white (supplements env map)
+scene.add(new THREE.AmbientLight(0xffffff, 0.4))
+
+const pLight1 = new THREE.PointLight(0x94e3fb, 6, 30)
+pLight1.position.set(5, 5, 5)
+scene.add(pLight1)
+
+const pLight2 = new THREE.PointLight(0xffffff, 3, 30)
+pLight2.position.set(-5, -3, 3)
+scene.add(pLight2)
+
+const pLight3 = new THREE.PointLight(0x22d3ee, 2, 30)
+pLight3.position.set(0, -5, -3)
+scene.add(pLight3)
+
+// ─── Coin definitions ───────────────────────────────────────────────────────
+// Each coin: rest position, rotation speeds, drift multiplier
+const COINS = [
+  { restPos: new THREE.Vector3(-2.4,  1.2,  0.0), rotSpeed: new THREE.Vector3(0.003, 0.007, 0.001), driftMul: 1.0 },
+  { restPos: new THREE.Vector3( 2.6,  0.3, -0.5), rotSpeed: new THREE.Vector3(0.005, 0.004, 0.002), driftMul: 1.4 },
+  { restPos: new THREE.Vector3(-0.3, -1.9,  0.3), rotSpeed: new THREE.Vector3(0.002, 0.009, 0.003), driftMul: 0.8 },
+]
+
+// ─── Load GLB and clone for each coin ───────────────────────────────────────
+const loader = new GLTFLoader()
+const coinGroups = []
+
+loader.load('./silver_coin.glb', (gltf) => {
+  const proto = gltf.scene
+
+  // Force silver PBR on all meshes regardless of GLB material
+  proto.traverse(obj => {
+    if (obj.isMesh) {
+      obj.material = new THREE.MeshStandardMaterial({
+        color:      0xd0d8e0,
+        metalness:  0.92,
+        roughness:  0.12,
+        envMapIntensity: 1.8,
+      })
+    }
+  })
+
+  COINS.forEach((def, i) => {
+    const group = new THREE.Group()
+    const mesh = proto.clone(true)
+    group.add(mesh)
+    group.position.copy(def.restPos)
+    group.rotation.x = i * 1.1
+    group.rotation.y = i * 0.7
+    scene.add(group)
+    coinGroups.push({ group, def })
+  })
+})
+
+// ─── Scroll state ───────────────────────────────────────────────────────────
+let scrollY = 0
+window.addEventListener('scroll', () => { scrollY = window.scrollY }, { passive: true })
+
+function getScrollProgress() {
+  const maxScroll = document.body.scrollHeight - window.innerHeight
+  return maxScroll > 0 ? scrollY / maxScroll : 0
+}
+
+// ─── Resize ─────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize(window.innerWidth, window.innerHeight)
+})
+
+// ─── Animation stages (p = 0..1 over full page scroll) ──────────────────────
+// 0.00 → 0.20  coins drift in from off-screen, idle float
+// 0.20 → 0.45  coins pull toward center, tighten together
+// 0.45 → 0.70  pinwheel / orbit around center
+// 0.70 → 0.90  spread apart dramatically, fill screen
+// 0.90 → 1.00  coins push toward camera (fill / exit)
+
+function lerp(a, b, t) { return a + (b - a) * t }
+function clamp01(t) { return Math.max(0, Math.min(1, t)) }
+function smoothstep(t) { return t * t * (3 - 2 * t) }
+function remap(t, a, b) { return smoothstep(clamp01((t - a) / (b - a))) }
+
+const _v = new THREE.Vector3()
+
+// Gathered positions (stage 2)
+const GATHERED = [
+  new THREE.Vector3(-0.55,  0.32, 0),
+  new THREE.Vector3( 0.55,  0.32, 0),
+  new THREE.Vector3( 0.00, -0.55, 0),
+]
+
+// Spread positions (stage 4)
+const SPREAD = [
+  new THREE.Vector3(-3.5,  2.2,  0.5),
+  new THREE.Vector3( 3.5,  1.8, -0.5),
+  new THREE.Vector3( 0.0, -3.0,  0.0),
+]
+
+function updateCoins(p) {
+  const time = performance.now() * 0.001
+
+  coinGroups.forEach(({ group, def }, i) => {
+
+    // ── Rotation (always spinning) ─────────────────────────────────────────
+    group.rotation.x += def.rotSpeed.x
+    group.rotation.y += def.rotSpeed.y
+    group.rotation.z += def.rotSpeed.z
+
+    // ── Position stages ────────────────────────────────────────────────────
+    let pos = new THREE.Vector3()
+
+    // Idle float offset (gentle sin/cos bob)
+    const floatX = Math.sin(time * 0.4 + i * 2.1) * 0.18
+    const floatY = Math.cos(time * 0.5 + i * 1.3) * 0.14
+
+    if (p < 0.20) {
+      // Stage 1: rest + idle float
+      pos.copy(def.restPos)
+      pos.x += floatX
+      pos.y += floatY
+
+      // Intro: coins start further back and fly forward on first 10%
+      const intro = remap(p, 0.0, 0.10)
+      pos.z = lerp(-6, def.restPos.z, intro)
+      const introScale = lerp(0.3, 1.0, intro)
+      group.scale.setScalar(introScale)
+
+    } else if (p < 0.45) {
+      // Stage 2: gather toward center
+      const t = remap(p, 0.20, 0.45)
+      pos.lerpVectors(def.restPos, GATHERED[i], t)
+      pos.x += floatX * (1 - t)
+      pos.y += floatY * (1 - t)
+      group.scale.setScalar(1.0)
+
+    } else if (p < 0.70) {
+      // Stage 3: orbit / pinwheel around center
+      const t = remap(p, 0.45, 0.70)
+      const orbitR  = lerp(0.55, 1.1, t)
+      const angle   = (i * Math.PI * 2 / 3) + t * Math.PI * 2.5
+      pos.set(
+        Math.cos(angle) * orbitR,
+        Math.sin(angle) * orbitR * 0.7,
+        Math.sin(angle * 0.5) * 0.3
+      )
+      // Blend from gathered start
+      const blend = remap(p, 0.45, 0.50)
+      pos.lerpVectors(GATHERED[i], pos, blend)
+      group.scale.setScalar(lerp(1.0, 1.3, t))
+
+    } else if (p < 0.90) {
+      // Stage 4: spread apart
+      const t = remap(p, 0.70, 0.90)
+      const orbitAngle = ((i * Math.PI * 2 / 3) + remap(p, 0.45, 0.70) * Math.PI * 2.5)
+      const orbitPos = new THREE.Vector3(
+        Math.cos(orbitAngle) * 1.1,
+        Math.sin(orbitAngle) * 0.77,
+        Math.sin(orbitAngle * 0.5) * 0.3
+      )
+      pos.lerpVectors(orbitPos, SPREAD[i], t)
+      group.scale.setScalar(lerp(1.3, 1.8, t))
+
+    } else {
+      // Stage 5: push toward camera
+      const t = remap(p, 0.90, 1.00)
+      pos.copy(SPREAD[i])
+      pos.z = lerp(SPREAD[i].z, 4.5, t)
+      group.scale.setScalar(lerp(1.8, 3.5, t))
+    }
+
+    group.position.copy(pos)
+  })
+}
+
+// ─── Render loop ─────────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate)
+  const p = getScrollProgress()
+  updateCoins(p)
+  renderer.render(scene, camera)
+}
+animate()
+</script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dive - Scroll To Plunge</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #000c18;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #webgl-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Spacing out the sections to make the scroll longer */
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            opacity: 0; 
+            transform: translateY(50px);
+        }
+
+        /* Give the first section a bit of top margin so we have time to look around before diving */
+        .first-step {
+            margin-top: 50vh; 
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            line-height: 1.6;
+            color: #d1ecff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Canvas -->
+    <div id="webgl-container"></div>
+
+    <!-- Scrollable Text Content -->
+    <div class="content">
+        <section class="step first-step">
+            <h1>The Surface</h1>
+            <p>Take a deep breath. Scroll down to break the surface and dive into the unknown.</p>
+        </section>
+        <section class="step">
+            <h1>The Sunlight Zone</h1>
+            <p>You are now underwater. Light still penetrates here, but it's getting darker.</p>
+        </section>
+        <section class="step">
+            <h1>The Twilight Zone</h1>
+            <p>Light fades. The water gets colder. The pressure increases.</p>
+        </section>
+        <section class="step">
+            <h1>The Midnight Zone</h1>
+            <p>Total darkness. The only light comes from bioluminescent creatures.</p>
+        </section>
+        <section class="step">
+            <h1>The Abyss</h1>
+            <p>The deepest, most uncharted frontier of our world.</p>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // --- 1. SETUP ---
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        
+        // Define our colors
+        const skyColor = { r: 0.53, g: 0.81, b: 0.92 }; // Light blue sky (#87CEEB)
+        const oceanColor = { r: 0.00, g: 0.26, b: 0.40 }; // Darker blue just under the surface
+        const abyssColor = { r: 0.00, g: 0.02, b: 0.05 }; // Pitch black
+        
+        // Start with Sky color
+        const currentColor = { r: skyColor.r, g: skyColor.g, b: skyColor.b };
+        scene.background = new THREE.Color(currentColor.r, currentColor.g, currentColor.b);
+        scene.fog = new THREE.FogExp2(scene.background, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // Start ABOVE the water (y = 3)
+        camera.position.set(0, 3, 5);
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // --- 2. ENVIRONMENT SETTINGS ---
+
+        // A. The Sun (Visible in the sky)
+        const sunGeo = new THREE.SphereGeometry(1, 32, 32);
+        const sunMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+        sunMesh.position.set(0, 10, -20);
+        scene.add(sunMesh);
+
+        // B. The Water Surface
+        const waterGeo = new THREE.PlaneGeometry(200, 200, 50, 50); // High segment count for waves
+        const waterMat = new THREE.MeshStandardMaterial({
+            color: 0x006994,
+            transparent: true,
+            opacity: 0.8,
+            roughness: 0.2,
+            metalness: 0.8,
+            side: THREE.DoubleSide // Visible from above AND below
+        });
+        const waterMesh = new THREE.Mesh(waterGeo, waterMat);
+        waterMesh.rotation.x = -Math.PI / 2; // Lay flat
+        waterMesh.position.y = 0; // Water level is exactly at Y=0
+        scene.add(waterMesh);
+
+        // C. Marine Snow (Particles) - Only spawn them UNDER the water (below Y=0)
+        const particlesGeo = new THREE.BufferGeometry();
+        const particlesCount = 3000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i+=3) {
+            posArray[i] = (Math.random() - 0.5) * 50; // X
+            posArray[i+1] = (Math.random() * -50) - 1; // Y (Start from -1 down to -51)
+            posArray[i+2] = (Math.random() - 0.5) * 50; // Z
+        }
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMat = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
+        scene.add(particlesMesh);
+
+        // D. Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(0, 20, 10);
+        scene.add(directionalLight);
+
+        // --- 3. ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) - 0.5;
+            mouseY = (event.clientY / window.innerHeight) - 0.5;
+        });
+
+        // Save original water vertices for wave animation
+        const waterVertices = waterMesh.geometry.attributes.position.array;
+        
+        function animate() {
+            const time = clock.getElapsedTime();
+
+            // 1. Animate Water Waves
+            for (let i = 0; i < waterVertices.length; i += 3) {
+                // In a rotated plane, Z is the up/down axis
+                const x = waterVertices[i];
+                const y = waterVertices[i+1];
+                waterVertices[i + 2] = Math.sin(x * 0.2 + time) * 0.2 + Math.cos(y * 0.2 + time) * 0.2;
+            }
+            waterMesh.geometry.attributes.position.needsUpdate = true;
+
+            // 2. Animate Marine Snow
+            particlesMesh.position.y = time * 0.2;
+            particlesMesh.rotation.y = time * 0.02;
+
+            // 3. Camera Sway (Floating effect)
+            camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- 4. RESIZE HANDLER ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 5. GSAP SCROLL ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Text Fading
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step) => {
+            gsap.to(step, {
+                opacity: 1,
+                y: 0, 
+                duration: 1,
+                scrollTrigger: {
+                    trigger: step,
+                    start: "top 60%", 
+                    end: "bottom 40%",
+                    toggleActions: "play reverse play reverse", 
+                }
+            });
+        });
+
+        // Master Scroll Timeline for 3D Scene
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".content",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1 
+            }
+        });
+
+        // Helper function to update Scene colors on scroll
+        function updateColors() {
+            const color = new THREE.Color(currentColor.r, currentColor.g, currentColor.b);
+            scene.background = color;
+            scene.fog.color = color;
+        }
+
+        // PHASE 1: THE DIVE (0% to 15% of scroll)
+        // Camera moves from y=3 (above water) to y=-2 (below water)
+        tl.to(camera.position, { y: -2, ease: "power1.inOut" }, 0);
+        // Background turns from Sky Blue to Ocean Blue rapidly as you break the surface
+        tl.to(currentColor, { 
+            r: oceanColor.r, 
+            g: oceanColor.g, 
+            b: oceanColor.b, 
+            ease: "power1.inOut", 
+            onUpdate: updateColors 
+        }, 0);
+        // Fog density increases rapidly when entering water
+        tl.to(scene.fog, { density: 0.08, ease: "power1.inOut" }, 0);
+
+        // PHASE 2: DESCENT INTO THE ABYSS (15% to 100% of scroll)
+        // Camera continues down into the deep
+        tl.to(camera.position, { y: -30, ease: "none" }, 0.5); // Starts a bit after the dive
+        // Water transitions from Ocean Blue to Pitch Black
+        tl.to(currentColor, { 
+            r: abyssColor.r, 
+            g: abyssColor.g, 
+            b: abyssColor.b, 
+            ease: "none", 
+            onUpdate: updateColors 
+        }, 0.5);
+        // Dim the sunlight
+        tl.to(directionalLight, { intensity: 0, ease: "none" }, 0.5);
+        // Fog gets slightly thicker
+        tl.to(scene.fog, { density: 0.1, ease: "none" }, 0.5);
+
+    </script>
+</body>
+</html>

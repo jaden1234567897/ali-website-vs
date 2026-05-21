@@ -1,0 +1,89 @@
+# ─── ali-website-vs root .gitignore ───
+# Goal: keep source code + small assets, exclude everything heavy or scratch.
+
+# Per-subproject build/runtime
+**/node_modules/
+**/.next/
+**/.vercel/
+**/out/
+**/build/
+**/coverage/
+**/.pnp
+**/.pnp.*
+**/.yarn/*
+
+# TS / Next.js generated
+**/*.tsbuildinfo
+**/next-env.d.ts
+
+# Logs
+*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env / secrets
+.env*
+**/.env*
+*.pem
+credentials.json
+token.json
+
+# ─── Local scratch / dev artifacts (don't push to GitHub) ───
+
+# Underscore-prefixed working folders (frame captures, comparisons, etc.)
+_*/
+_*.png
+
+# Top-level dev screenshots and review captures
+bridge-*.png
+hero-*.png
+coin-*.png
+hero-motion-*.png
+hero-triangle-*.png
+nav-no-outer-bg.png
+slide-*.png
+slide-*.svg
+coin-reference*.html
+coin-reference*.png
+coin-motion*.png
+
+# Inside each subproject's root, the dev review screenshots
+website/*.png
+website-v4/*.png
+website-v5/*.png
+website-v6/*.png
+website*/dev-*.log
+website*/vercel-*.log
+website*/*.zip
+website*/_*
+
+# Large binaries we don't want in git
+*.mp4
+*.mov
+*.zip
+*.pdf
+
+# Frame sequences (each subproject's public/frames is large)
+**/public/frames/
+**/public/frames-hd/
+**/public/frames-venn/
+
+# Allow specific small frame-related files if needed
+!**/public/*.glb
+
+# Per-subproject scratch
+website/_*
+website-v4/_*
+website-v5/_*
+website-v6/_*
+
+# The personal docx files (Ali's brief) — small but keep private by default.
+# Comment out if you DO want these in the public repo.
+ali's info/

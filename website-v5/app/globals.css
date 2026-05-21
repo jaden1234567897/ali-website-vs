@@ -1,0 +1,6244 @@
+﻿/* Single-family typography across the whole site: Literata at all weights.
+   The opsz axis (7..72) auto-tunes the letterforms for body vs display sizes,
+   so this one font does double duty — paragraphs, eyebrows, nav, AND big
+   serif headlines. Italics included for the gold emphasis phrases. */
+@import url("https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* ali-v5: white page background. Legacy tokens drive any pre-Ali
+     components that still read --bg/--ink etc. instead of --ali-*. Ink
+     family stays navy so text contrast remains consistent across all
+     legacy and ali-prefixed sections. */
+  --bg: oklch(1 0 0);
+  --bg-deep: oklch(0.97 0.012 200);
+  --ink: oklch(0.36 0.07 240);
+  --ink-strong: oklch(0.28 0.075 240);
+  --muted: oklch(0.50 0.06 230);
+  --quiet: oklch(0.62 0.05 215);
+  --line: oklch(0.36 0.07 240 / 0.16);
+  --line-strong: oklch(0.36 0.07 240 / 0.28);
+  --panel: oklch(0.96 0.02 200 / 0.78);
+  --metal: oklch(0.50 0.06 225);
+  --brass: oklch(0.69 0.10 220);
+  --blue: oklch(0.36 0.07 240);
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --radius: 8px;
+  --hero-copy-hide: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg-deep);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  /* ali-v5: very subtle teal washes against the white page bg. Opacity
+     pulled way down (was 0.50/0.32 → 0.18/0.10) so the page reads as
+     "clean white with a hint of coastal tint" rather than tinted teal.
+     The linear-gradient base anchored at pure white at the top so the
+     hero feels like an open canvas. */
+  background:
+    radial-gradient(circle at 70% 30%, oklch(0.92 0.05 200 / 0.18), transparent 38vw),
+    radial-gradient(circle at 16% 78%, oklch(0.92 0.04 215 / 0.10), transparent 32vw),
+    linear-gradient(180deg, oklch(1 0 0), var(--bg-deep));
+  color: var(--ink);
+  font-family: "Literata", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, oklch(0.38 0.03 232 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.38 0.03 232 / 0.04) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: linear-gradient(to bottom, black, black 74%, transparent);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, oklch(1 0 0 / 0.54), transparent 18%, transparent 82%, oklch(1 0 0 / 0.42)),
+    linear-gradient(180deg, transparent 62%, oklch(0.88 0.014 230 / 0.48));
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+.site-shell {
+  min-height: 240svh;
+  isolation: isolate;
+}
+
+.coin-field {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  opacity: 0.98;
+  filter: contrast(1.2) saturate(0.92) drop-shadow(0 14px 24px oklch(0.12 0.025 235 / 0.12));
+  pointer-events: none;
+}
+
+.specimen-page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, oklch(0.23 0.03 226 / 0.38), transparent 34rem),
+    linear-gradient(180deg, oklch(0.1 0.016 238), oklch(0.055 0.012 238));
+}
+
+.specimen-canvas {
+  display: block;
+  width: 100vw;
+  height: 100svh;
+}
+
+.specimen-label {
+  position: fixed;
+  left: 28px;
+  bottom: 24px;
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-family: "Literata", Georgia, serif;
+}
+
+.specimen-label span,
+.specimen-label em {
+  color: var(--quiet);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.specimen-label strong {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.motion-lab {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, oklch(0.24 0.034 226 / 0.4), transparent 34rem),
+    linear-gradient(180deg, oklch(0.085 0.016 238), oklch(0.035 0.01 238));
+}
+
+.motion-lab::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.022) 1px, transparent 1px);
+  background-size: 88px 88px;
+}
+
+.motion-lab-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.motion-lab-word {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  color: var(--ink-strong);
+  font-size: clamp(42px, 5vw, 86px);
+  font-weight: 760;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  text-align: center;
+  text-shadow: 0 20px 70px oklch(0 0 0 / 0.65);
+  transform: translate(-50%, -50%);
+  transition: opacity 140ms linear;
+  pointer-events: none;
+}
+
+.motion-lab-panel {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 5;
+  display: grid;
+  width: min(440px, calc(100vw - 40px));
+  max-height: calc(100svh - 40px);
+  gap: 14px;
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: oklch(0.08 0.014 238 / 0.88);
+  box-shadow: 0 30px 90px oklch(0 0 0 / 0.42);
+  backdrop-filter: blur(18px);
+}
+
+.motion-lab-panel span {
+  color: var(--quiet);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.motion-lab-panel h1 {
+  margin-top: 4px;
+  color: var(--ink-strong);
+  font-family: "Literata", Georgia, serif;
+  font-size: 30px;
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.motion-lab-panel p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.motion-lab-control {
+  display: grid;
+  grid-template-columns: 52px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+}
+
+.motion-lab-progress {
+  grid-template-columns: 112px 1fr 44px;
+}
+
+.motion-lab-control input {
+  width: 100%;
+  accent-color: var(--ink-strong);
+}
+
+.motion-lab-control b {
+  color: var(--ink);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.motion-lab-buttons,
+.motion-lab-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.motion-lab-buttons button,
+.motion-lab-tabs button {
+  min-height: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  color: var(--ink);
+  background: oklch(0.13 0.02 238 / 0.72);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.motion-lab-tabs button[aria-pressed="true"] {
+  color: oklch(0.07 0.012 238);
+  background: var(--ink-strong);
+}
+
+.motion-lab-grid {
+  display: grid;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.motion-lab-panel textarea {
+  min-height: 148px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  color: var(--muted);
+  background: oklch(0.045 0.012 238 / 0.78);
+  font: 11px/1.45 "Consolas", monospace;
+}
+
+@media (max-width: 760px) {
+  .motion-lab-panel {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+    width: auto;
+    max-height: 52svh;
+  }
+
+  .motion-lab-word {
+    top: 42%;
+    font-size: clamp(34px, 10vw, 48px);
+  }
+}
+
+.site-nav,
+main {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-scroll-stage {
+  /* ali-v3: 240svh → 160svh. Removed 1 full butterfly roll from the
+     hero (1.5 → 0.5 rolls), so the stage shrinks proportionally to
+     keep the rotation-per-pixel rate identical. Saves ~80svh of
+     scroll before the nova pin begins. */
+  min-height: 160svh;
+}
+
+.site-nav {
+  position: fixed;
+  z-index: 20;
+  top: var(--space-lg);
+  left: 50%;
+  display: flex;
+  width: min(1180px, calc(100% - 48px));
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: 9px 10px 9px var(--space-lg);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: translateX(-50%);
+}
+
+.brand {
+  display: grid;
+  gap: 1px;
+  min-width: 150px;
+  text-decoration: none;
+}
+
+.brand strong {
+  color: var(--ink-strong);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.brand span,
+.eyebrow,
+.hero-panel span,
+.hero-panel dt {
+  color: var(--quiet);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.site-nav nav {
+  display: flex;
+  gap: clamp(18px, 2.8vw, 34px);
+}
+
+.site-nav nav a {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.site-nav nav a:hover {
+  color: var(--ink);
+}
+
+.nav-button,
+.primary-action,
+.secondary-action,
+.hero-panel a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  border-radius: var(--radius);
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.nav-button,
+.primary-action {
+  color: oklch(0.985 0.006 220);
+  background: var(--ink-strong);
+}
+
+.nav-button {
+  min-height: 40px;
+  padding: 0 var(--space-md);
+}
+
+.secondary-action,
+.hero-panel a {
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  background: oklch(1 0 0 / 0.58);
+  backdrop-filter: blur(14px);
+}
+
+.primary-action,
+.secondary-action {
+  padding: 0 20px;
+}
+
+.nav-button:hover,
+.primary-action:hover,
+.secondary-action:hover,
+.hero-panel a:hover {
+  transform: translateY(-2px);
+}
+
+.secondary-action:hover,
+.hero-panel a:hover {
+  border-color: oklch(0.86 0.045 220 / 0.44);
+}
+
+.hero-section {
+  position: relative;
+  display: grid;
+  width: min(1180px, calc(100% - 48px));
+  min-height: 100svh;
+  margin: 0 auto;
+  grid-template-columns: minmax(0, 0.92fr) minmax(330px, 0.38fr);
+  gap: var(--space-2xl);
+  align-items: end;
+  padding: clamp(120px, 17vh, 176px) 0 clamp(46px, 8vh, 86px);
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  right: -8vw;
+  bottom: 8vh;
+  width: min(70vw, 900px);
+  height: min(70vw, 900px);
+  border: 1px solid oklch(0.36 0.035 220 / 0.09);
+  border-radius: 50%;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--space-sm);
+  color: var(--metal);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.hero-kicker i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--brass);
+}
+
+.hero-copy {
+  display: grid;
+  max-width: 790px;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-sm);
+}
+
+.eyebrow {
+  color: var(--brass);
+}
+
+h1 {
+  display: grid;
+  gap: 0;
+  max-width: 11ch;
+  color: var(--ink-strong);
+  font-family: "Literata", Georgia, serif;
+  font-size: clamp(58px, 8.1vw, 118px);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 0.9;
+}
+
+h1 span {
+  display: block;
+}
+
+.mobile-break {
+  display: none;
+}
+
+.hero-lede {
+  max-width: 690px;
+  color: var(--muted);
+  font-size: clamp(18px, 1.6vw, 23px);
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.hero-panel {
+  display: grid;
+  gap: var(--space-lg);
+  align-self: end;
+  padding: var(--space-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.88), oklch(0.945 0.012 232 / 0.78)),
+    var(--panel);
+  box-shadow:
+    0 32px 100px oklch(0.32 0.03 232 / 0.14),
+    inset 0 1px 0 oklch(1 0 0 / 0.7);
+  backdrop-filter: blur(22px);
+}
+
+.hero-panel strong {
+  display: block;
+  max-width: 8ch;
+  margin-top: var(--space-xs);
+  color: var(--ink-strong);
+  font-size: clamp(32px, 3vw, 46px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.96;
+}
+
+.hero-panel dl {
+  display: grid;
+  gap: 1px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-panel dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+}
+
+.hero-panel dd {
+  color: var(--brass);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hero-panel a {
+  justify-self: start;
+  min-height: 40px;
+  padding: 0 var(--space-md);
+  color: var(--metal);
+  font-size: 14px;
+}
+
+.nova-nav {
+  justify-content: center;
+  width: min(760px, calc(100% - 48px));
+  min-height: 54px;
+  padding: 7px 16px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.nova-nav .brand {
+  position: absolute;
+  left: -180px;
+}
+
+.nova-nav nav {
+  gap: 26px;
+  padding: 0 28px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.nova-nav nav a {
+  padding: 12px 0;
+}
+
+.nova-hero {
+  position: sticky;
+  top: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
+  align-items: end;
+  width: min(100% - 96px, 1720px);
+  min-height: 100svh;
+  padding: 150px 0 88px;
+}
+
+.nova-hero::before {
+  display: none;
+}
+
+.nova-hero-title {
+  align-self: end;
+  max-width: 980px;
+  gap: 0;
+  padding-bottom: 2px;
+  opacity: calc(1 - var(--hero-copy-hide));
+  transform: translate3d(0, calc(var(--hero-copy-hide) * -28px), 0);
+  filter: blur(calc(var(--hero-copy-hide) * 8px));
+  transition: opacity 80ms linear;
+}
+
+.nova-hero-title h1 {
+  display: block;
+  max-width: none;
+  color: var(--ink-strong);
+  font-family: "Literata", Georgia, serif;
+  font-size: clamp(68px, 5.35vw, 104px);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.94;
+}
+
+.nova-hero-title h1 em {
+  font-family: "Literata", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.07em;
+}
+
+.nova-hero-aside {
+  align-self: end;
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+  padding-bottom: 12px;
+  opacity: calc(1 - var(--hero-copy-hide));
+  transform: translate3d(0, calc(var(--hero-copy-hide) * 24px), 0);
+  filter: blur(calc(var(--hero-copy-hide) * 8px));
+  transition: opacity 80ms linear;
+}
+
+.nova-hero-aside p {
+  color: var(--ink);
+  font-size: clamp(24px, 1.65vw, 33px);
+  font-weight: 450;
+  letter-spacing: -0.045em;
+  line-height: 1.14;
+}
+
+.nova-start {
+  min-height: 50px;
+  padding: 0 28px;
+  border-radius: 999px;
+  color: oklch(0.985 0.006 220);
+  background: var(--ink-strong);
+}
+
+.bridge-section {
+  --bridge-progress: 0;
+  --bridge-assemble: 0;
+  --bridge-lock: 0;
+  position: relative;
+  z-index: 4;
+  min-height: 330svh;
+  margin-top: -1px;
+  background:
+    radial-gradient(circle at 50% 42%, oklch(0.28 0.052 226 / 0.22), transparent 34vw),
+    radial-gradient(circle at 18% 48%, oklch(0.18 0.028 230 / 0.64), transparent 28vw),
+    radial-gradient(circle at 83% 52%, oklch(0.19 0.03 230 / 0.68), transparent 28vw),
+    linear-gradient(180deg, oklch(0.055 0.012 238), oklch(0.085 0.018 238) 42%, oklch(0.05 0.012 238));
+}
+
+.bridge-section::before,
+.bridge-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bridge-section::before {
+  opacity: 0.62;
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.032) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.022) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: linear-gradient(to bottom, transparent, black 9%, black 86%, transparent);
+}
+
+.bridge-section::after {
+  background:
+    linear-gradient(90deg, oklch(0 0 0 / 0.44), transparent 24%, transparent 76%, oklch(0 0 0 / 0.42)),
+    radial-gradient(circle at 50% 52%, transparent 0 18rem, oklch(0 0 0 / 0.24) 38rem);
+}
+
+.bridge-sticky {
+  position: sticky;
+  top: 0;
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  overflow: hidden;
+}
+
+.bridge-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(100% - 96px, 1600px);
+  min-height: 100svh;
+  grid-template-rows: auto 1fr;
+  gap: clamp(12px, 2vh, 24px);
+  padding: clamp(74px, 9vh, 88px) 0 clamp(22px, 4vh, 38px);
+}
+
+.bridge-heading {
+  display: grid;
+  max-width: 650px;
+  gap: 8px;
+}
+
+.bridge-heading span,
+.bridge-problem span,
+.bridge-role span {
+  color: var(--quiet);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.095em;
+  text-transform: uppercase;
+}
+
+.bridge-heading h2 {
+  max-width: 12ch;
+  color: var(--ink-strong);
+  font-family: "Literata", Georgia, serif;
+  font-size: clamp(44px, 4.1vw, 76px);
+  font-weight: 450;
+  letter-spacing: -0.065em;
+  line-height: 0.9;
+}
+
+.bridge-heading h2 em {
+  font-family: "Literata", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.07em;
+}
+
+.bridge-heading p {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.05vw, 19px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.38;
+  opacity: calc(1 - (var(--bridge-lock) * 0.3));
+}
+
+.bridge-content {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.55fr) minmax(520px, 1.35fr) minmax(220px, 0.65fr);
+  align-items: center;
+  gap: clamp(22px, 3.2vw, 56px);
+}
+
+.bridge-problem,
+.bridge-role {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+.bridge-problem {
+  transform: translate3d(calc(var(--bridge-lock) * -18px), 0, 0);
+  opacity: calc(1 - (var(--bridge-lock) * 0.45));
+}
+
+.bridge-problem p {
+  position: relative;
+  max-width: 250px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.05vw, 18px);
+  font-weight: 620;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  opacity: clamp(0.3, calc((var(--bridge-assemble) + 0.2 - (var(--item-index) * 0.07)) * 1.65), 1);
+  transform: translate3d(calc((1 - var(--bridge-assemble)) * -18px), 0, 0);
+}
+
+.bridge-problem p::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: color-mix(in oklch, var(--metal) 76%, transparent);
+  box-shadow: 0 0 18px oklch(0.82 0.03 225 / 0.35);
+}
+
+.bridge-role {
+  justify-items: start;
+  opacity: var(--bridge-lock);
+  transform: translate3d(calc((1 - var(--bridge-lock)) * 26px), 0, 0);
+}
+
+.bridge-role p {
+  max-width: 290px;
+  color: var(--ink-strong);
+  font-size: clamp(25px, 1.9vw, 36px);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.bridge-role strong {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 16px;
+  border: 1px solid oklch(0.86 0.03 226 / 0.18);
+  border-radius: 999px;
+  color: var(--metal);
+  background: oklch(0.13 0.018 238 / 0.34);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06);
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  opacity: clamp(0, calc((var(--bridge-lock) - (var(--item-index) * 0.1)) * 4), 1);
+  transform: translate3d(0, calc((1 - var(--bridge-lock)) * 15px), 0);
+}
+
+.bridge-visual {
+  position: relative;
+  height: clamp(300px, 30vw, 392px);
+  isolation: isolate;
+}
+
+.bridge-ghost-mark {
+  position: absolute;
+  inset: 3% 15%;
+  z-index: 0;
+  opacity: calc(0.08 + (var(--bridge-lock) * 0.12));
+  transform: rotate(calc(var(--bridge-progress) * 52deg)) scale(calc(0.92 + (var(--bridge-lock) * 0.12)));
+  filter: blur(0.2px);
+}
+
+.bridge-ghost-mark i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56%;
+  height: 15%;
+  border: 1px solid oklch(0.72 0.04 226 / 0.5);
+  border-radius: 999px;
+  background: linear-gradient(90deg, oklch(0.72 0.028 226 / 0.06), oklch(0.92 0.014 220 / 0.18), oklch(0.36 0.035 226 / 0.08));
+  transform: translate(-50%, -50%) rotate(var(--ghost-angle));
+}
+
+.bridge-ghost-mark i:nth-child(1) {
+  --ghost-angle: 0deg;
+}
+
+.bridge-ghost-mark i:nth-child(2) {
+  --ghost-angle: 60deg;
+}
+
+.bridge-ghost-mark i:nth-child(3) {
+  --ghost-angle: -60deg;
+}
+
+.bridge-field {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  width: clamp(156px, 14vw, 224px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid oklch(0.86 0.032 224 / 0.16);
+  border-radius: 50%;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 35% 26%, oklch(0.76 0.026 225 / 0.18), transparent 34%),
+    linear-gradient(145deg, oklch(0.2 0.026 236 / 0.58), oklch(0.08 0.016 238 / 0.82));
+  box-shadow:
+    0 30px 90px oklch(0 0 0 / 0.28),
+    inset 0 1px 0 oklch(1 0 0 / 0.08),
+    inset 0 -28px 54px oklch(0 0 0 / 0.22);
+  transform: translate3d(var(--field-x), -50%, 0) scale(calc(1 - (var(--bridge-lock) * 0.18)));
+  transition: filter 160ms linear;
+}
+
+.bridge-field b {
+  font-size: clamp(20px, 1.75vw, 30px);
+  font-weight: 740;
+  letter-spacing: -0.035em;
+}
+
+.bridge-field-strategy {
+  --field-x: calc(-42% + (var(--bridge-assemble) * 20%));
+  left: 9%;
+}
+
+.bridge-field-execution {
+  --field-x: calc(42% - (var(--bridge-assemble) * 20%));
+  right: 9%;
+}
+
+.bridge-gap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: clamp(108px, 10vw, 166px);
+  height: clamp(220px, 22vw, 320px);
+  border-radius: 999px;
+  opacity: calc(1 - (var(--bridge-lock) * 0.78));
+  transform: translate(-50%, -50%) scaleX(calc(1 - (var(--bridge-assemble) * 0.38)));
+  background: radial-gradient(ellipse at 50% 50%, oklch(0.02 0.006 238 / 0.88), transparent 65%);
+  box-shadow:
+    0 0 0 1px oklch(0.7 0.03 226 / 0.06),
+    0 0 90px oklch(0 0 0 / 0.55);
+}
+
+.bridge-gap span {
+  position: absolute;
+  top: 14%;
+  width: 1px;
+  height: 72%;
+  background: linear-gradient(transparent, oklch(0.78 0.035 226 / 0.34), transparent);
+}
+
+.bridge-gap span:first-child {
+  left: 40%;
+}
+
+.bridge-gap span:last-child {
+  right: 40%;
+}
+
+.bridge-network {
+  position: absolute;
+  inset: 6% 3%;
+  z-index: 3;
+  overflow: visible;
+  opacity: clamp(0, calc(var(--bridge-assemble) * 1.35), 1);
+}
+
+.bridge-path {
+  fill: none;
+  stroke: oklch(0.78 0.038 226 / 0.46);
+  stroke-width: 1.4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--bridge-assemble));
+  filter: drop-shadow(0 0 10px oklch(0.7 0.075 226 / 0.34));
+}
+
+.bridge-path-low {
+  stroke: oklch(0.86 0.026 220 / 0.28);
+  stroke-dashoffset: calc(1 - (var(--bridge-assemble) * 0.82));
+}
+
+.bridge-path-axis {
+  stroke: oklch(0.74 0.03 226 / 0.24);
+  stroke-dashoffset: calc(1 - var(--bridge-lock));
+}
+
+.bridge-node {
+  fill: var(--metal);
+  opacity: clamp(0, calc((var(--bridge-assemble) - 0.24) * 4), 1);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(0.45 + (var(--bridge-lock) * 0.55)));
+  filter: drop-shadow(0 0 16px oklch(0.86 0.038 226 / 0.52));
+}
+
+.bridge-governance {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  display: grid;
+  width: clamp(142px, 12.5vw, 194px);
+  aspect-ratio: 1;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  border: 1px solid oklch(0.88 0.03 226 / calc(0.1 + (var(--bridge-lock) * 0.28)));
+  border-radius: 50%;
+  color: var(--ink-strong);
+  background:
+    radial-gradient(circle at 34% 24%, oklch(0.82 0.03 220 / 0.2), transparent 32%),
+    oklch(0.15 0.025 236 / calc(0.42 + (var(--bridge-lock) * 0.18)));
+  box-shadow:
+    0 0 calc(25px + (var(--bridge-lock) * 58px)) oklch(0.66 0.06 226 / calc(0.12 + (var(--bridge-lock) * 0.22))),
+    inset 0 1px 0 oklch(1 0 0 / 0.09);
+  opacity: clamp(0, calc((var(--bridge-assemble) - 0.18) * 2.4), 1);
+  transform: translate(-50%, -50%) scale(calc(0.72 + (var(--bridge-assemble) * 0.28)));
+}
+
+.bridge-governance::before,
+.bridge-governance::after {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border: 1px solid oklch(0.78 0.034 226 / calc(0.12 + (var(--bridge-lock) * 0.18)));
+  border-radius: 50%;
+  transform: scale(calc(0.82 + (var(--bridge-lock) * 0.18))) rotate(calc(var(--bridge-progress) * 60deg));
+}
+
+.bridge-governance::after {
+  inset: -34px;
+  opacity: 0.46;
+  transform: scale(calc(0.74 + (var(--bridge-lock) * 0.26))) rotate(calc(var(--bridge-progress) * -42deg));
+}
+
+.bridge-governance span {
+  font-size: clamp(22px, 1.9vw, 34px);
+  font-weight: 780;
+  letter-spacing: -0.045em;
+}
+
+.bridge-governance strong {
+  color: var(--quiet);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bridge-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.bridge-labels span {
+  position: absolute;
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid oklch(0.88 0.03 226 / 0.14);
+  border-radius: 999px;
+  color: var(--metal);
+  background: oklch(0.08 0.014 238 / 0.72);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05);
+  font-size: 11px;
+  font-weight: 760;
+  letter-spacing: 0.02em;
+  opacity: clamp(0, calc((var(--bridge-lock) - (var(--item-index) * 0.08)) * 4), 1);
+  transform: translate3d(0, calc((1 - var(--bridge-lock)) * 16px), 0);
+}
+
+.bridge-labels span:nth-child(1) {
+  left: 30%;
+  top: 22%;
+}
+
+.bridge-labels span:nth-child(2) {
+  right: 29%;
+  top: 22%;
+}
+
+.bridge-labels span:nth-child(3) {
+  left: 24%;
+  bottom: 22%;
+}
+
+.bridge-labels span:nth-child(4) {
+  right: 22%;
+  bottom: 21%;
+}
+
+.coin-motion-section {
+  --motion-progress: 0;
+  --motion-detach: 0;
+  --motion-x: 0vw;
+  --motion-y: 0vh;
+  --word-1: 0;
+  --word-2: 0;
+  --word-3: 0;
+  min-height: 300svh;
+  background:
+    radial-gradient(circle at 50% 46%, oklch(0.22 0.045 228 / 0.22), transparent 36vw),
+    radial-gradient(circle at 20% 50%, oklch(0.16 0.025 230 / 0.48), transparent 30vw),
+    radial-gradient(circle at 80% 48%, oklch(0.17 0.028 230 / 0.52), transparent 30vw),
+    linear-gradient(180deg, oklch(0.05 0.012 238), oklch(0.075 0.017 238) 45%, oklch(0.045 0.011 238));
+}
+
+.coin-motion-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.bridge-coin-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.coin-motion-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.coin-motion-system {
+  position: absolute;
+  inset: 0;
+  transform: none;
+}
+
+.coin-motion-lines {
+  display: none;
+}
+
+.coin-motion-line {
+  fill: none;
+  stroke: oklch(0.82 0.032 226 / 0.42);
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - clamp(0, calc((var(--motion-detach) - 0.28) * 1.7), 1));
+  filter: drop-shadow(0 0 10px oklch(0.72 0.07 226 / 0.32));
+}
+
+.coin-motion-line-b {
+  stroke: oklch(0.86 0.024 220 / 0.24);
+  stroke-dashoffset: calc(1 - clamp(0, calc((var(--motion-detach) - 0.36) * 1.5), 1));
+}
+
+.coin-motion-line-c {
+  stroke: oklch(0.76 0.028 226 / 0.2);
+  stroke-dashoffset: calc(1 - clamp(0, calc((var(--motion-detach) - 0.44) * 1.4), 1));
+}
+
+.coin-motion-dot {
+  fill: var(--metal);
+  opacity: clamp(0, calc((var(--motion-detach) - 0.42) * 2.4), 1);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(0.45 + (var(--motion-detach) * 0.55)));
+  filter: drop-shadow(0 0 16px oklch(0.86 0.038 226 / 0.52));
+}
+
+.coin-motion-word {
+  --word-x: 0vw;
+  --word-y: 0vh;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  color: oklch(0.9 0.012 232 / 0.9);
+  font-size: clamp(34px, 3.35vw, 58px);
+  font-weight: 680;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  text-align: center;
+  text-shadow:
+    0 1px 0 oklch(1 0 0 / 0.06),
+    0 18px 56px oklch(0 0 0 / 0.72);
+  transform: translate(calc(-50% + var(--word-x)), calc(-50% + var(--word-y)));
+  opacity: var(--word-alpha);
+  filter: none;
+  clip-path: inset(0 calc((1 - var(--word-alpha)) * 100%) 0 0);
+  will-change: opacity, clip-path;
+}
+
+.word-governance {
+  --word-alpha: var(--word-1);
+  --word-x: -19vw;
+  --word-y: 2.6vh;
+}
+
+.word-execution {
+  --word-alpha: var(--word-2);
+  --word-x: 19vw;
+  --word-y: -2.6vh;
+}
+
+.word-strategy {
+  --word-alpha: var(--word-3);
+  --word-x: 0vw;
+  --word-y: 1.5vh;
+}
+
+.coin-motion-chapters {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: repeat(3, 100svh);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.coin-motion-caption {
+  position: absolute;
+  left: clamp(28px, 8vw, 150px);
+  bottom: clamp(36px, 8vh, 84px);
+  z-index: 5;
+  max-width: 360px;
+  opacity: clamp(0, calc((var(--motion-progress) - 0.04) * 4), 0.72);
+  transform: translateY(calc((1 - var(--motion-detach)) * 18px));
+  pointer-events: none;
+}
+
+.coin-motion-caption span {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--quiet);
+  font-size: 11px;
+  font-weight: 840;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.coin-motion-caption p {
+  color: var(--muted);
+  font-size: clamp(16px, 1.2vw, 20px);
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+@media (max-width: 980px) {
+  .hero-section {
+    grid-template-columns: 1fr;
+    align-items: end;
+  }
+
+  .hero-panel {
+    width: min(100%, 430px);
+  }
+
+  .nova-nav .brand {
+    position: static;
+  }
+
+  .nova-nav {
+    justify-content: space-between;
+    width: calc(100% - 32px);
+  }
+
+  .nova-hero {
+    grid-template-columns: 1fr;
+    width: calc(100% - 32px);
+    padding: 120px 0 52px;
+  }
+
+  .nova-hero-title h1 {
+    font-size: clamp(58px, 12vw, 90px);
+  }
+
+  .nova-hero-aside {
+    width: min(100%, 340px);
+    margin-left: auto;
+  }
+
+  .bridge-shell {
+    width: calc(100% - 40px);
+  }
+
+  .bridge-content {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .bridge-problem,
+  .bridge-role {
+    max-width: 520px;
+  }
+
+  .bridge-role {
+    justify-self: end;
+  }
+
+  .bridge-visual {
+    order: -1;
+    height: min(58vh, 520px);
+  }
+
+  .coin-motion-system {
+    width: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    background:
+      radial-gradient(circle at 76% 30%, oklch(0.88 0.04 220 / 0.5), transparent 68vw),
+      linear-gradient(180deg, oklch(0.985 0.004 220), var(--bg-deep));
+  }
+
+  .site-nav {
+    top: var(--space-xs);
+    width: calc(100% - 16px);
+    padding: 8px 8px 8px var(--space-sm);
+  }
+
+  .site-nav nav {
+    display: none;
+  }
+
+  .nova-nav {
+    width: calc(100% - 16px);
+  }
+
+  .nav-button {
+    width: 40px;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0;
+  }
+
+  .coin-field {
+    opacity: 0.96;
+  }
+
+  .hero-section {
+    width: calc(100% - 24px);
+    min-height: 100svh;
+    gap: var(--space-xl);
+    padding: 112px 0 var(--space-lg);
+  }
+
+  .nova-hero {
+    width: calc(100% - 24px);
+    padding: 112px 0 36px;
+  }
+
+  .nova-hero-title h1 {
+    font-size: clamp(35px, 10.2vw, 42px);
+    letter-spacing: -0.05em;
+    line-height: 0.97;
+  }
+
+  .nova-hero-aside {
+    justify-self: stretch;
+    justify-items: start;
+    width: 100%;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .nova-hero-aside p {
+    max-width: 230px;
+    font-size: 22px;
+  }
+
+  .nova-start {
+    width: auto;
+    min-width: 180px;
+    max-width: 100%;
+  }
+
+  .hero-kicker {
+    flex-wrap: wrap;
+  }
+
+  .hero-section::before {
+    right: -54vw;
+    bottom: 32vh;
+    width: 112vw;
+    height: 112vw;
+  }
+
+  h1 {
+    max-width: 100%;
+    font-size: clamp(43px, 12.4vw, 54px);
+    line-height: 0.94;
+  }
+
+  .mobile-break {
+    display: block;
+  }
+
+  .hero-lede {
+    max-width: 26rem;
+    font-size: 16px;
+  }
+
+  .action-row,
+  .primary-action,
+  .secondary-action {
+    width: 100%;
+  }
+
+  .nova-start {
+    width: auto;
+    padding-inline: 24px;
+  }
+
+  .hero-panel {
+    padding: var(--space-md);
+  }
+
+  .hero-panel strong {
+    font-size: 32px;
+  }
+
+  .bridge-section {
+    min-height: 270svh;
+  }
+
+  .bridge-shell {
+    width: calc(100% - 28px);
+    gap: 18px;
+    padding: 92px 0 32px;
+  }
+
+  .bridge-heading {
+    gap: 10px;
+  }
+
+  .bridge-heading h2 {
+    max-width: 9ch;
+    font-size: clamp(38px, 12vw, 50px);
+    line-height: 0.96;
+  }
+
+  .bridge-heading p {
+    max-width: 310px;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .bridge-content {
+    align-content: start;
+    gap: 18px;
+  }
+
+  .bridge-visual {
+    height: 380px;
+  }
+
+  .bridge-field {
+    width: 148px;
+  }
+
+  .bridge-field b {
+    font-size: 18px;
+  }
+
+  .bridge-field-strategy {
+    left: 1%;
+  }
+
+  .bridge-field-execution {
+    right: 1%;
+  }
+
+  .bridge-governance {
+    width: 142px;
+  }
+
+  .bridge-governance::before {
+    inset: -13px;
+  }
+
+  .bridge-governance::after {
+    inset: -24px;
+  }
+
+  .bridge-governance span {
+    font-size: 22px;
+  }
+
+  .bridge-labels span {
+    min-height: 26px;
+    padding: 0 9px;
+    font-size: 9px;
+  }
+
+  .bridge-labels span:nth-child(1) {
+    left: 11%;
+    top: 20%;
+  }
+
+  .bridge-labels span:nth-child(2) {
+    right: 9%;
+    top: 20%;
+  }
+
+  .bridge-labels span:nth-child(3) {
+    left: 5%;
+    bottom: 20%;
+  }
+
+  .bridge-labels span:nth-child(4) {
+    right: 4%;
+    bottom: 20%;
+  }
+
+  .bridge-problem,
+  .bridge-role {
+    gap: 10px;
+  }
+
+  .bridge-problem p {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  .bridge-role {
+    justify-self: stretch;
+  }
+
+  .bridge-role p {
+    max-width: 300px;
+    font-size: 24px;
+  }
+
+  .bridge-role strong {
+    min-height: 32px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .coin-motion-section {
+    min-height: 300svh;
+  }
+
+  .coin-motion-system {
+    width: auto;
+    transform: none;
+  }
+
+  .coin-motion-word {
+    font-size: clamp(28px, 8.2vw, 36px);
+    letter-spacing: -0.05em;
+  }
+
+  .word-governance {
+    --word-x: -12vw;
+    --word-y: 1.5vh;
+  }
+
+  .word-execution {
+    --word-x: 12vw;
+    --word-y: -1.5vh;
+  }
+
+  .word-strategy {
+    --word-x: 0vw;
+    --word-y: 1vh;
+  }
+
+  .coin-motion-caption {
+    left: 24px;
+    right: 24px;
+    bottom: 34px;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .nav-button,
+  .primary-action,
+  .secondary-action,
+  .hero-panel a {
+    transition: none;
+  }
+
+  .bridge-field,
+  .bridge-problem,
+  .bridge-role,
+  .bridge-labels span,
+  .bridge-governance,
+  .bridge-ghost-mark {
+    transform: none;
+  }
+}
+
+/* â”€â”€ Extended design tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+:root {
+  --accent:    oklch(0.78 0.13 220);
+  --border:    oklch(0.78 0.04 220 / 0.16);
+  --header-h:  84px;
+  --text-xs:   11px;
+  --text-sm:   13.5px;
+  --text-base: 16px;
+  --text-3xl:  clamp(28px, 3.5vw, 44px);
+}
+
+/* â”€â”€ Section shells â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.section { position: relative; z-index: 3; }
+
+.container {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.ocean-section {
+  padding: clamp(80px, 12vh, 140px) 0;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line);
+}
+
+.label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--quiet);
+}
+
+.label-accent  { color: var(--brass); }
+.section-label { color: var(--quiet); font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; }
+
+/* â”€â”€ Cinematic footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.cinematic-footer-wrapper {
+  position: relative;
+  height: 100vh;
+  z-index: 3;
+}
+
+.cinematic-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background: var(--bg-deep);
+  color: var(--ink);
+}
+
+.footer-aurora {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80vw;
+  height: 60vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    oklch(0.38 0.065 235 / 0.18) 0%,
+    oklch(0.32 0.055 82  / 0.12) 45%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  animation: footer-breathe 8s ease-in-out infinite alternate;
+}
+
+.ali-nova-transition {
+  --nova-wipe-opacity: 0;
+  position: relative;
+  z-index: 3;
+  height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 38%, oklch(0.96 0.018 220 / 0.84), transparent 34rem),
+    radial-gradient(circle at 12% 82%, oklch(0.88 0.03 224 / 0.42), transparent 30rem),
+    linear-gradient(180deg, oklch(0.985 0.004 220), oklch(0.94 0.012 224));
+  color: oklch(0.1 0.026 235);
+}
+
+.ali-nova-wipe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ali-nova-wipe {
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--nova-wipe-opacity);
+  background:
+    radial-gradient(circle at 50% -12%, oklch(1 0 0 / 0.88), transparent 27rem),
+    radial-gradient(circle at 24% 72%, oklch(0.82 0.026 222 / 0.26), transparent 30rem),
+    linear-gradient(180deg, oklch(0.98 0.005 220 / 0.78), oklch(0.91 0.012 224 / 0.72));
+  backdrop-filter: blur(1px);
+}
+
+.ali-nova-timeline {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  padding: clamp(92px, 10vw, 140px) clamp(24px, 8vw, 140px);
+  visibility: hidden;
+}
+
+.ali-nova-line {
+  position: absolute;
+  left: 50%;
+  top: 11%;
+  width: 2px;
+  height: 78%;
+  background:
+    linear-gradient(180deg, transparent, oklch(1 0 0 / 0.94) 9% 91%, transparent);
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 0.48),
+    0 18px 54px oklch(0.38 0.04 224 / 0.12);
+  border-radius: 999px;
+}
+
+.ali-nova-cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: repeat(3, minmax(130px, 1fr));
+  gap: clamp(16px, 3vh, 30px);
+  max-width: 1040px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.ali-nova-card {
+  position: relative;
+  display: grid;
+  align-content: center;
+  width: min(430px, 42vw);
+  min-height: 132px;
+  padding: clamp(18px, 2.3vw, 28px);
+  border: 1px solid oklch(1 0 0 / 0.68);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.72), oklch(0.98 0.004 220 / 0.44)),
+    radial-gradient(circle at 18% 10%, oklch(1 0 0 / 0.9), transparent 48%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.8),
+    0 22px 70px oklch(0.3 0.03 230 / 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.ali-nova-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: clamp(72px, 8vw, 112px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.86));
+}
+
+.ali-nova-card::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
+  border: 2px solid oklch(1 0 0 / 0.92);
+  border-radius: 50%;
+  background: oklch(0.82 0.018 224);
+  box-shadow: 0 0 0 6px oklch(1 0 0 / 0.36);
+}
+
+.ali-nova-card:nth-child(odd) {
+  justify-self: start;
+  text-align: right;
+}
+
+.ali-nova-card:nth-child(odd)::before {
+  left: 100%;
+}
+
+.ali-nova-card:nth-child(odd)::after {
+  left: calc(100% + clamp(68px, 8vw, 108px));
+}
+
+.ali-nova-card:nth-child(even) {
+  justify-self: end;
+  text-align: left;
+}
+
+.ali-nova-card:nth-child(even)::before {
+  right: 100%;
+  transform: rotate(180deg);
+}
+
+.ali-nova-card:nth-child(even)::after {
+  right: calc(100% + clamp(68px, 8vw, 108px));
+}
+
+.ali-nova-card span {
+  display: block;
+  margin-bottom: 9px;
+  color: oklch(0.42 0.035 232 / 0.72);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ali-nova-card h3 {
+  margin: 0 0 8px;
+  color: oklch(0.11 0.026 235);
+  font-size: clamp(25px, 2.6vw, 42px);
+  font-weight: 540;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
+}
+
+.ali-nova-card p {
+  margin: 0;
+  color: oklch(0.28 0.024 235 / 0.76);
+  font-size: clamp(14px, 1.05vw, 17px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.ali-nova-reveal {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: min(1040px, calc(100% - 48px));
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(8px, 1.2vw, 16px);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: oklch(0.11 0.026 235);
+  font-size: clamp(42px, 7vw, 112px);
+  font-weight: 620;
+  letter-spacing: -0.075em;
+  line-height: 0.86;
+  visibility: hidden;
+}
+
+.ali-nova-word {
+  display: inline-block;
+}
+
+.ali-nova-final {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: clamp(24px, 8vw, 142px);
+  width: min(420px, 36vw);
+  transform: translateY(-50%);
+  visibility: hidden;
+}
+
+.ali-nova-final span {
+  display: block;
+  margin-bottom: 14px;
+  color: oklch(0.45 0.04 232 / 0.72);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ali-nova-final h2 {
+  margin: 0 0 24px;
+  color: oklch(0.1 0.026 235);
+  font-size: clamp(34px, 4.2vw, 70px);
+  font-weight: 560;
+  letter-spacing: -0.07em;
+  line-height: 0.94;
+}
+
+.ali-nova-final ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ali-nova-final li {
+  color: oklch(0.25 0.024 235 / 0.78);
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 520;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+@media (max-width: 760px) {
+  .ali-nova-timeline {
+    padding: 92px 22px 44px;
+  }
+
+  .ali-nova-line {
+    left: 24px;
+    height: 58svh;
+  }
+
+  .ali-nova-cards {
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  .ali-nova-card,
+  .ali-nova-card:nth-child(odd),
+  .ali-nova-card:nth-child(even) {
+    justify-self: end;
+    width: calc(100% - 44px);
+    text-align: left;
+  }
+
+  .ali-nova-card::before {
+    display: none;
+  }
+
+  .ali-nova-card::after,
+  .ali-nova-card:nth-child(odd)::after,
+  .ali-nova-card:nth-child(even)::after {
+    left: auto;
+    right: calc(100% + 18px);
+  }
+
+  .ali-nova-reveal {
+    font-size: clamp(38px, 14vw, 74px);
+    line-height: 0.9;
+  }
+
+  .ali-nova-final {
+    right: 22px;
+    width: calc(100% - 44px);
+  }
+}
+
+@keyframes footer-breathe {
+  from { transform: translate(-50%, -50%) scale(1);   opacity: 0.6; }
+  to   { transform: translate(-50%, -50%) scale(1.1); opacity: 1;   }
+}
+
+.footer-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right,  oklch(1 0 0 / 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.022) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+}
+
+.footer-giant {
+  position: absolute;
+  bottom: -6vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 26vw;
+  line-height: 0.75;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px oklch(1 0 0 / 0.05);
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.08) 0%, transparent 55%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+  user-select: none;
+}
+
+.footer-marquee {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border-top:    1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 11px 0;
+  transform: rotate(-1.8deg) scaleX(1.05);
+  background: oklch(0.095 0.016 238 / 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.footer-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 38s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.footer-marquee-copy {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 4vw, 52px);
+  padding: 0 clamp(24px, 4vw, 52px);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.footer-marquee-copy b {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--brass);
+  flex-shrink: 0;
+}
+
+.footer-center {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-lg) clamp(20px, 6vw, 80px);
+}
+
+.footer-center h2 {
+  font-family: "Literata", Georgia, serif;
+  font-size: clamp(40px, 7vw, 96px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--ink-strong);
+  margin: var(--space-md) 0 var(--space-lg);
+  background: linear-gradient(180deg, var(--ink-strong) 0%, oklch(0.92 0.018 226 / 0.45) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px oklch(1 0 0 / 0.08));
+}
+
+.footer-center p {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+}
+
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.footer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 13px 26px;
+  border-radius: 9999px;
+  border: 1px solid var(--line-strong);
+  background: oklch(0.13 0.021 236 / 0.62);
+  backdrop-filter: blur(14px);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: border-color 280ms ease, background-color 280ms ease;
+}
+
+.footer-pill:hover {
+  border-color: oklch(0.86 0.045 220 / 0.44);
+  background: oklch(0.16 0.024 236 / 0.8);
+}
+
+.footer-pill-muted { color: var(--muted); border-color: var(--line); }
+.footer-pill-muted:hover { color: var(--ink); }
+
+.footer-top-button { width: 48px; height: 48px; padding: 0; justify-content: center; }
+
+.footer-bottom {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) clamp(20px, 5vw, 64px);
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--quiet);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-marquee-track { animation: none; }
+  .footer-aurora        { animation: none; }
+}
+
+.engraving-test-page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 54% 38%, oklch(0.23 0.018 235 / 0.5), transparent 34%),
+    linear-gradient(180deg, #020709 0%, #000 100%);
+}
+
+.engraving-test-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 74px 74px;
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.02) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 24%, black 76%, transparent);
+}
+
+.engraving-test-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.engraving-test-meta {
+  position: absolute;
+  left: clamp(18px, 4vw, 56px);
+  bottom: clamp(18px, 4vw, 48px);
+  display: grid;
+  gap: 4px;
+  color: oklch(0.86 0.02 230);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.engraving-test-meta strong {
+  color: white;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+}
+
+/* Videos sphere section */
+.videos-sphere-section {
+  position: relative;
+  z-index: 6;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(46px, 7vw, 90px) clamp(18px, 4vw, 52px);
+  background: transparent;
+  overflow: hidden;
+  perspective: 1500px;
+}
+
+.videos-sphere-reset {
+  position: absolute;
+  top: clamp(28px, 4vw, 54px);
+  right: clamp(18px, 4vw, 52px);
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ink-strong);
+  background: oklch(1 0 0 / 0.78);
+  box-shadow: 0 10px 30px oklch(0.28 0.03 232 / 0.13);
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.videos-sphere-reset:hover,
+.videos-sphere-arrow:hover {
+  transform: translateY(-1px) scale(1.03);
+  background: oklch(1 0 0 / 0.96);
+}
+
+.videos-sphere-stage {
+  position: relative;
+  width: min(1280px, 100%);
+  height: clamp(470px, 58vw, 680px);
+  transform-style: preserve-3d;
+  display: grid;
+  place-items: center;
+}
+
+.videos-sphere-ring {
+  --carousel-radius: clamp(300px, 33vw, 500px);
+  position: relative;
+  width: 1px;
+  height: 1px;
+  transform-style: preserve-3d;
+  transform:
+    rotateX(-7deg)
+    rotateY(var(--ring-rotation));
+  transition: transform 1150ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.videos-sphere-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(142px, 12vw, 218px);
+  aspect-ratio: 0.68;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid oklch(0.3 0.028 232 / 0.08);
+  border-radius: 18px;
+  transform-style: preserve-3d;
+  transform:
+    translate(-50%, -50%)
+    rotateY(var(--item-angle))
+    translateZ(var(--carousel-radius))
+    rotateY(calc(-1 * var(--item-angle)))
+    rotateY(calc(-1 * var(--ring-rotation)));
+  box-shadow:
+    0 34px 86px oklch(0.3 0.03 232 / 0.18),
+    0 10px 26px oklch(0.28 0.03 232 / 0.12);
+  transition:
+    box-shadow 320ms ease;
+  backface-visibility: visible;
+}
+
+.videos-sphere-card img {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  object-position: center;
+  backface-visibility: visible;
+}
+
+.videos-sphere-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.22), transparent 38%),
+    linear-gradient(180deg, transparent 62%, oklch(0.18 0.018 235 / 0.2));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.46);
+}
+
+.videos-sphere-card:hover {
+  box-shadow:
+    0 34px 78px oklch(0.3 0.03 232 / 0.2),
+    0 10px 26px oklch(0.28 0.03 232 / 0.12);
+}
+
+.videos-sphere-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--ink-strong);
+  background: oklch(1 0 0 / 0.8);
+  box-shadow: 0 18px 46px oklch(0.28 0.03 232 / 0.14);
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.videos-sphere-arrow-left {
+  left: clamp(18px, 4vw, 52px);
+}
+
+.videos-sphere-arrow-right {
+  right: clamp(18px, 4vw, 52px);
+}
+
+@media (max-width: 760px) {
+  .videos-sphere-section {
+    min-height: 86svh;
+  }
+
+  .videos-sphere-stage {
+    height: 520px;
+  }
+
+  .videos-sphere-ring {
+    --carousel-radius: 230px;
+  }
+
+  .videos-sphere-card {
+    width: min(37vw, 150px);
+  }
+
+  .videos-sphere-arrow {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .videos-sphere-ring,
+  .videos-sphere-card {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ============================================================
+   ALI â€” LIGHT THEME SECTION SYSTEM (executive editorial)
+   ============================================================ */
+:root {
+  /* ali-v5 palette — white page, black text, mid-teal accent.
+     bg     #FFFFFF (clean white)
+     ink    #0D0D0D (black, restored from v4)
+     accent #62B6CB (mid-teal, replaces gold)
+     soft   #BEE9E8 (pale teal, used for card surfaces and soft tints)
+     Only the accent family swapped from gold → teal; ink/muted/shadow
+     stay grayscale so the page reads as classic editorial b/w with a
+     blue accent rather than fully re-tinted. */
+  --ali-cream: #FFFFFF;
+  --ali-white: #BEE9E8;
+  --ali-ink: #0D0D0D;
+  --ali-ink-2: #1F1F1F;
+  --ali-muted: #6B6B6B;
+  --ali-quiet: #9A9A9A;
+  --ali-line: rgba(13, 13, 13, 0.08);
+  --ali-line-strong: rgba(13, 13, 13, 0.16);
+  --ali-gold: #62B6CB;
+  --ali-gold-soft: rgba(98, 182, 203, 0.14);
+  --ali-gold-line: rgba(98, 182, 203, 0.36);
+  --ali-shadow-sm: 0 2px 8px rgba(13, 13, 13, 0.04), 0 8px 24px rgba(13, 13, 13, 0.06);
+  --ali-shadow-md: 0 8px 24px rgba(13, 13, 13, 0.06), 0 24px 60px rgba(13, 13, 13, 0.08);
+  --ali-shadow-lg: 0 24px 60px rgba(13, 13, 13, 0.10), 0 40px 100px rgba(13, 13, 13, 0.12);
+  --ali-radius: 12px;
+  --ali-radius-lg: 20px;
+  --ali-section-x: clamp(20px, 5vw, 96px);
+  --ali-section-y: clamp(80px, 10vw, 140px);
+  --ali-container: 1200px;
+  --font-display: "Literata", Georgia, serif;
+  --font-body: "Literata", Georgia, serif;
+}
+
+.ali-site {
+  position: relative;
+  background: var(--ali-cream);
+  color: var(--ali-ink);
+  font-family: var(--font-body);
+  isolation: isolate;
+}
+
+.ali-site::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 80% 0%, rgba(196, 151, 58, 0.06), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 10% 100%, rgba(13, 30, 60, 0.04), transparent 70%),
+    radial-gradient(circle at 1px 1px, rgba(13, 13, 13, 0.05) 1px, transparent 0);
+  background-size: 100% 100%, 100% 100%, 32px 32px;
+}
+
+.ali-section {
+  position: relative;
+  width: 100%;
+  padding: var(--ali-section-y) var(--ali-section-x);
+  z-index: 1;
+}
+
+.ali-section--white { background: var(--ali-white); }
+.ali-section--cream { background: transparent; }
+
+.ali-container {
+  max-width: var(--ali-container);
+  margin: 0 auto;
+  position: relative;
+}
+
+.ali-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ali-gold);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.ali-eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--ali-gold);
+}
+
+.ali-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5vw, 64px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ali-ink);
+  margin: 0 0 24px;
+}
+
+.ali-h2 em {
+  font-style: italic;
+  color: var(--ali-gold);
+}
+
+.ali-lede {
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--ali-muted);
+  max-width: 640px;
+  margin: 0 0 40px;
+}
+
+.ali-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease, color 200ms ease, border-color 200ms ease;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ali-btn--primary {
+  background: var(--ali-ink);
+  color: var(--ali-white);
+  box-shadow: var(--ali-shadow-sm);
+}
+
+.ali-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ali-shadow-md);
+  background: #000;
+}
+
+.ali-btn--gold {
+  background: var(--ali-gold);
+  color: var(--ali-white);
+}
+
+.ali-btn--gold:hover {
+  transform: translateY(-2px);
+  background: #B0852C;
+}
+
+.ali-btn--ghost {
+  background: transparent;
+  color: var(--ali-ink);
+  border-color: var(--ali-line-strong);
+}
+
+.ali-btn--ghost:hover {
+  border-color: var(--ali-ink);
+  background: var(--ali-ink);
+  color: var(--ali-white);
+}
+
+.ali-btn--whatsapp {
+  background: #25D366;
+  color: white;
+}
+
+.ali-btn--whatsapp:hover {
+  background: #20BA5A;
+  transform: translateY(-2px);
+}
+
+/* â”€â”€â”€ Light Nav â”€â”€â”€ */
+.ali-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px clamp(20px, 4vw, 56px);
+  transition: background 280ms ease, backdrop-filter 280ms ease, border-color 280ms ease, padding 280ms ease;
+  border-bottom: 1px solid transparent;
+}
+
+.ali-nav[data-scrolled="true"] {
+  background: rgba(248, 246, 242, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: var(--ali-line);
+  padding: 12px clamp(20px, 4vw, 56px);
+}
+
+.ali-nav-brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.ali-nav-brand strong {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ali-ink);
+  letter-spacing: -0.01em;
+}
+
+.ali-nav-brand span {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ali-gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.ali-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.ali-nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ali-ink-2);
+  text-decoration: none;
+  transition: color 180ms ease;
+  position: relative;
+}
+
+.ali-nav-links a:hover { color: var(--ali-gold); }
+
+.ali-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ali-ink);
+  color: var(--ali-white);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 200ms ease, background 200ms ease;
+}
+
+.ali-nav-cta:hover {
+  transform: translateY(-1px);
+  background: #000;
+}
+
+.ali-nav-burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--ali-line-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--ali-ink);
+}
+
+.ali-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--ali-cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 80px 24px 40px;
+  transform: translateY(-100%);
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ali-mobile-menu[data-open="true"] {
+  transform: translateY(0);
+}
+
+.ali-mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ali-ink);
+  text-decoration: none;
+}
+
+@media (max-width: 880px) {
+  .ali-nav-links { display: none; }
+  .ali-nav-cta { display: none; }
+  .ali-nav-burger { display: inline-flex; }
+}
+
+/* â”€â”€â”€ Bridge Gap (light) â”€â”€â”€ */
+.ali-bridge {
+  position: relative;
+  min-height: 220svh;
+}
+
+.ali-bridge-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ali-bridge-content {
+  position: relative;
+  text-align: center;
+  max-width: 880px;
+  padding: 0 var(--ali-section-x);
+}
+
+.ali-bridge-words {
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 56px);
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.ali-bridge-word {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ali-ink);
+  opacity: 0.18;
+  transition: opacity 600ms ease, color 600ms ease;
+}
+
+.ali-bridge-word[data-active="true"] {
+  opacity: 1;
+  color: var(--ali-gold);
+}
+
+.ali-bridge-statement {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ali-ink-2);
+}
+
+.ali-bridge-statement em {
+  font-style: italic;
+  color: var(--ali-gold);
+}
+
+.ali-bridge-tagline {
+  margin-top: 32px;
+  font-size: clamp(14px, 1.2vw, 17px);
+  color: var(--ali-muted);
+  line-height: 1.7;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* â”€â”€â”€ Core Products â€” 3D Books â”€â”€â”€ */
+.ali-products {
+  padding: var(--ali-section-y) var(--ali-section-x);
+  background: var(--ali-cream);
+}
+
+.ali-products-shelf {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(40px, 6vw, 96px);
+  perspective: 2400px;
+  margin-top: 80px;
+  padding: 60px 0 80px;
+}
+
+.ali-book {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  perspective: 1800px;
+  /* Style + layout containment so a hover on one book doesn't invalidate
+     style for the rest of the shelf. Paint containment is still off so the
+     swung-open cover isn't clipped. */
+  contain: layout style;
+  will-change: transform;
+  overflow: visible;
+  /* New stacking context — keeps the compositor from merging this book's
+     layers with surrounding content during the rotation. */
+  isolation: isolate;
+  /* Drop-shadow lives on the (non-rotating) book element — was previously
+     on each rotating cover face, where it had to re-rasterize per frame
+     because shadows are clipped to the layer's screen-space bounds. */
+  filter: drop-shadow(0 12px 30px rgba(13, 13, 13, 0.18))
+    drop-shadow(0 30px 60px rgba(13, 13, 13, 0.12));
+}
+
+.ali-book:hover {
+  transform: translate3d(0, -8px, 0);
+}
+
+.ali-book-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  overflow: visible;
+}
+
+
+.ali-book-cover,
+.ali-book-inside {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 8px 8px 2px;
+}
+
+.ali-book-inside { overflow: hidden; }
+
+/* The cover element is a 3D pivot — it holds two faces (front + back).
+   It has no visual styling of its own; the faces carry the look. */
+.ali-book-cover {
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transform: translate3d(0, 0, 0) rotateY(0deg);
+  /* Snappier 550 ms swing with an ease-out curve so the cover lunges
+     open quickly and decelerates into place — feels much closer to a
+     Framer Motion hover than the previous 850 ms s-curve. */
+  transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 2;
+  will-change: transform;
+}
+
+.ali-book[data-open="true"] .ali-book-cover {
+  transform: translate3d(0, 0, 0) rotateY(-138deg);
+}
+
+/* Both faces — pre-promoted to their own GPU layers (translateZ + will-change)
+   so the rotation is composite-only: the browser caches the rasterized
+   gradients once and just re-orients the layer per frame, instead of
+   repainting the front/back content during every step of the swing. */
+.ali-book-cover-front,
+.ali-book-cover-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 8px 8px 2px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+}
+
+.ali-book-cover-front {
+  transform: translate3d(0, 0, 0);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 14px),
+    linear-gradient(270deg, rgba(255, 255, 255, 0.06), transparent 4px),
+    linear-gradient(135deg, var(--book-color-1, #1f1f1f), var(--book-color-2, #0a0a0a));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px 28px 32px 44px;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+/* Back face — what you see when the cover is swung open. Cream paper inner
+   cover with a soft gold border, like a real hardcover endpaper. */
+.ali-book-cover-back {
+  transform: translate3d(0, 0, 0) rotateY(180deg);
+  background:
+    linear-gradient(270deg, rgba(0, 0, 0, 0.18), transparent 14px),
+    linear-gradient(135deg, #f7f1e3, #ece2c8);
+  border-radius: 8px 2px 2px 8px;
+}
+
+.ali-book-cover-back::after {
+  content: "";
+  position: absolute;
+  inset: 18px 32px 18px 16px;
+  border: 1px solid rgba(196, 151, 58, 0.45);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.ali-book-cover-front::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent);
+}
+
+.ali-book-cover-front::after {
+  content: "";
+  position: absolute;
+  inset: 16px 16px 16px 32px;
+  border: 1px solid rgba(196, 151, 58, 0.32);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.ali-book-mark {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+  position: relative;
+  z-index: 1;
+}
+
+.ali-book-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  position: relative;
+  z-index: 1;
+}
+
+.ali-book-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.ali-book-inside {
+  padding: 32px 28px 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 1;
+  transform: rotateY(0deg);
+  background:
+    linear-gradient(90deg, rgba(13, 13, 13, 0.10), transparent 14px),
+    linear-gradient(270deg, rgba(13, 13, 13, 0.06), transparent 6px),
+    linear-gradient(135deg, var(--ali-white), #FAF7F1);
+  opacity: 0;
+  /* Inside text now fades in synchronously with the cover swing (no
+     delay) so it materialises alongside the cover lifting away —
+     instead of appearing on a blank cream page after the rotation
+     finishes, which felt disjointed. */
+  transition: opacity 280ms ease 40ms;
+}
+
+.ali-book[data-open="true"] .ali-book-inside {
+  opacity: 1;
+}
+
+.ali-book-inside-mark {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+}
+
+.ali-book-inside-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ali-ink);
+  letter-spacing: -0.01em;
+}
+
+.ali-book-inside-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ali-muted);
+}
+
+.ali-book-inside ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ali-book-inside li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--ali-ink-2);
+  line-height: 1.5;
+}
+
+.ali-book-inside li::before {
+  content: "â€”";
+  color: var(--ali-gold);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.ali-book-inside-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ali-ink);
+  text-decoration: none;
+  padding-top: 14px;
+  border-top: 1px solid var(--ali-line);
+}
+
+.ali-book-inside-cta::after {
+  content: "â†’";
+  transition: transform 240ms ease;
+}
+
+.ali-book:hover .ali-book-inside-cta::after,
+.ali-book[data-open="true"] .ali-book-inside-cta::after {
+  transform: translateX(4px);
+}
+
+.ali-book-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 22px;
+  background: linear-gradient(90deg, #0a0a0a, var(--book-color-2, #0d1a2e));
+  transform: rotateY(90deg) translateZ(11px) translateX(-11px);
+  transform-origin: left center;
+  border-radius: 2px;
+}
+
+.ali-book-shadow {
+  /* The drop-shadow on .ali-book itself now provides the grounding shadow,
+     so this element is no longer needed. Hidden completely — we keep the
+     class in the JSX so future iterations can re-enable it without a
+     React change, but it draws nothing today. */
+  display: none;
+}
+
+@media (max-width: 880px) {
+  .ali-products-shelf {
+    grid-template-columns: 1fr;
+    gap: 56px;
+    padding: 40px 0;
+    perspective: 1400px;
+  }
+  .ali-book { max-width: 320px; margin: 0 auto; }
+}
+
+/* â”€â”€â”€ AI Curved Slider â”€â”€â”€ */
+.ali-curved {
+  background: var(--ali-white);
+  padding: var(--ali-section-y) 0;
+  overflow: hidden;
+}
+
+.ali-curved-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 80px;
+  padding: 0 var(--ali-section-x);
+}
+
+.ali-curved-stage {
+  position: relative;
+  height: clamp(420px, 50vw, 580px);
+  perspective: 2000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ali-curved-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.ali-curved-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(280px, 36vw, 460px);
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--ali-cream);
+  box-shadow: var(--ali-shadow-md);
+  border: 1px solid var(--ali-line);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms ease, filter 600ms ease;
+  transform-origin: center center;
+  user-select: none;
+  cursor: pointer;
+}
+
+.ali-curved-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ali-curved-card-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 28px;
+  background: linear-gradient(to top, rgba(13, 13, 13, 0.85), transparent);
+  color: var(--ali-white);
+}
+
+.ali-curved-card-label small {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.ali-curved-card-label strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ali-curved-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 0 var(--ali-section-x);
+}
+
+.ali-curved-arrow {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--ali-line-strong);
+  background: var(--ali-cream);
+  color: var(--ali-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.ali-curved-arrow:hover {
+  border-color: var(--ali-ink);
+  background: var(--ali-ink);
+  color: var(--ali-white);
+}
+
+.ali-curved-counter {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ali-muted);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  min-width: 88px;
+  text-align: center;
+}
+
+@media (max-width: 880px) {
+  .ali-curved-stage { height: 380px; perspective: 1200px; }
+  .ali-curved-card { width: 78vw; }
+}
+
+/* â”€â”€â”€ About â”€â”€â”€ */
+.ali-about-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+  margin-top: 60px;
+}
+
+.ali-about-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--ali-radius-lg);
+  overflow: hidden;
+  background: var(--ali-cream);
+  box-shadow: var(--ali-shadow-md);
+}
+
+.ali-about-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ali-about-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 4px solid var(--ali-gold);
+  border-radius: var(--ali-radius-lg);
+  pointer-events: none;
+}
+
+.ali-about-name {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.6vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ali-ink);
+  margin-bottom: 8px;
+}
+
+.ali-about-role {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+  margin-bottom: 28px;
+}
+
+.ali-about-bio {
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.75;
+  color: var(--ali-ink-2);
+  margin-bottom: 20px;
+}
+
+.ali-about-bio + .ali-about-bio {
+  color: var(--ali-muted);
+}
+
+.ali-about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 32px 0;
+  margin: 36px 0;
+  border-top: 1px solid var(--ali-line);
+  border-bottom: 1px solid var(--ali-line);
+}
+
+.ali-stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 600;
+  color: var(--ali-gold);
+  line-height: 1;
+}
+
+.ali-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+  margin-top: 8px;
+}
+
+.ali-about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 880px) {
+  .ali-about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ali-about-photo { max-width: 360px; margin: 0 auto; }
+}
+
+/* ─── About Ali — normal section with cinematic reveal animations ─── */
+.ali-about-section {
+  position: relative;
+  width: 100%;
+  background: var(--ali-cream);
+  padding: clamp(80px, 10vw, 140px) var(--ali-section-x);
+  overflow: hidden;
+}
+
+.ali-about-section-stage {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ali-about-section-head {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 56px;
+}
+
+.ali-about-section-eyebrow {
+  justify-content: center;
+  display: inline-flex;
+  margin-bottom: 16px;
+}
+
+.ali-about-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--ali-ink);
+  margin: 0;
+}
+
+.ali-about-section-title em {
+  font-style: italic;
+  color: var(--ali-gold);
+  font-weight: 500;
+}
+
+.ali-about-section-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) 1.15fr;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: start;
+  perspective: 1200px;
+}
+
+.ali-about-section-photo {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--ali-radius-lg);
+  overflow: hidden;
+  background: var(--ali-cream);
+  box-shadow: var(--ali-shadow-md);
+  will-change: transform, opacity;
+}
+
+.ali-about-section-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ali-about-section-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 4px solid var(--ali-gold);
+  border-radius: var(--ali-radius-lg);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ali-about-section-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(212, 178, 87, 0) 38%,
+    rgba(212, 178, 87, 0.55) 50%,
+    rgba(212, 178, 87, 0) 62%,
+    transparent 70%
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.ali-about-section-content {
+  min-width: 0;
+}
+
+.ali-about-section-pills {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ali-about-section-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+  border: 1px solid var(--ali-gold);
+  border-radius: 999px;
+  background: transparent;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.ali-about-section-name {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ali-ink);
+  margin: 0 0 24px;
+  padding-bottom: 6px;
+  line-height: 1.1;
+}
+
+.ali-about-section-name-inner {
+  display: inline-block;
+  perspective: 800px;
+}
+
+.ali-about-section-name-word {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.ali-about-section-name-underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--ali-gold);
+  transform-origin: 0% 50%;
+  will-change: transform;
+}
+
+.ali-about-section-bio {
+  font-size: clamp(15px, 1.15vw, 16.5px);
+  line-height: 1.7;
+  color: var(--ali-ink-2);
+  margin: 0 0 18px;
+}
+
+.ali-about-section-bio--muted {
+  color: var(--ali-muted);
+}
+
+.ali-about-section-bio-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.ali-about-section-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 28px 0;
+  margin: 28px 0;
+  border-top: 1px solid var(--ali-line);
+  border-bottom: 1px solid var(--ali-line);
+}
+
+.ali-about-section-stat {
+  will-change: transform, opacity;
+}
+
+.ali-about-section-stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.6vw, 34px);
+  font-weight: 600;
+  color: var(--ali-gold);
+  line-height: 1;
+}
+
+.ali-about-section-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+  margin-top: 8px;
+}
+
+.ali-about-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 880px) {
+  .ali-about-section {
+    padding: 80px var(--ali-section-x);
+  }
+  .ali-about-section-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .ali-about-section-photo {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .ali-about-section-stats {
+    gap: 16px;
+  }
+}
+
+/* â”€â”€â”€ Services â”€â”€â”€ */
+.ali-services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.ali-service {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(28px, 3vw, 40px);
+  background: var(--ali-white);
+  border: 1px solid var(--ali-line);
+  border-radius: var(--ali-radius-lg);
+  transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  min-height: 240px;
+}
+
+.ali-service::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--ali-gold);
+  transition: width 320ms ease;
+}
+
+.ali-service:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--ali-shadow-md);
+  border-color: var(--ali-gold-line);
+}
+
+.ali-service:hover::before {
+  width: 4px;
+}
+
+.ali-service-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ali-gold);
+  margin-bottom: 18px;
+}
+
+.ali-service-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ali-ink);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.ali-service-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ali-muted);
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+.ali-service-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ali-ink);
+  margin-top: auto;
+}
+
+.ali-service-link::after {
+  content: "â†’";
+  transition: transform 220ms ease;
+}
+
+.ali-service:hover .ali-service-link::after {
+  transform: translateX(4px);
+}
+
+@media (max-width: 760px) {
+  .ali-services-grid { grid-template-columns: 1fr; }
+}
+
+/* â”€â”€â”€ How We Work â”€â”€â”€ */
+.ali-process {
+  position: relative;
+  margin-top: 60px;
+}
+
+.ali-process-line {
+  position: absolute;
+  top: 28px;
+  left: 16.66%;
+  right: 16.66%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--ali-gold-line), var(--ali-gold-line), transparent);
+}
+
+.ali-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+
+.ali-process-step {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ali-process-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ali-cream);
+  border: 1px solid var(--ali-gold-line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ali-gold);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+  background: var(--ali-white);
+  box-shadow: var(--ali-shadow-sm);
+}
+
+.ali-process-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 26px);
+  font-weight: 600;
+  color: var(--ali-ink);
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.ali-process-desc {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ali-muted);
+  margin-bottom: 20px;
+}
+
+.ali-process-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.ali-process-bullets li {
+  font-size: 13px;
+  color: var(--ali-ink-2);
+  display: flex;
+  gap: 10px;
+}
+
+.ali-process-bullets li::before {
+  content: "â€¢";
+  color: var(--ali-gold);
+}
+
+@media (max-width: 880px) {
+  .ali-process-grid { grid-template-columns: 1fr; gap: 48px; }
+  .ali-process-line { display: none; }
+}
+
+/* â”€â”€â”€ Testimonials â”€â”€â”€ */
+.ali-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 60px;
+}
+
+.ali-testimonial {
+  background: var(--ali-white);
+  border: 1px solid var(--ali-line);
+  border-radius: var(--ali-radius-lg);
+  padding: 36px 32px;
+  position: relative;
+  transition: transform 320ms ease, box-shadow 320ms ease;
+}
+
+.ali-testimonial:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ali-shadow-md);
+}
+
+.ali-testimonial-mark {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 0.8;
+  color: var(--ali-gold);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.ali-testimonial-quote {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--ali-ink-2);
+  margin-bottom: 28px;
+}
+
+.ali-testimonial-attr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ali-line);
+}
+
+.ali-testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ali-gold-soft);
+  border: 1px solid var(--ali-gold-line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ali-gold);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ali-testimonial-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ali-ink);
+  margin-bottom: 2px;
+}
+
+.ali-testimonial-org {
+  font-size: 11px;
+  color: var(--ali-muted);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 1024px) {
+  .ali-testimonials-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* â”€â”€â”€ Course Teaser â”€â”€â”€ */
+.ali-course {
+  background: var(--ali-cream);
+  position: relative;
+  overflow: hidden;
+}
+
+.ali-course-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.ali-course-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--ali-gold-soft);
+  border: 1px solid var(--ali-gold-line);
+  color: var(--ali-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.ali-course-features {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ali-course-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--ali-ink-2);
+}
+
+.ali-course-features li::before {
+  content: "âœ“";
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ali-gold);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ali-course-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.ali-course-input {
+  padding: 14px 20px;
+  border: 1px solid var(--ali-line-strong);
+  border-radius: 999px;
+  font-size: 14px;
+  background: var(--ali-white);
+  font-family: inherit;
+  color: var(--ali-ink);
+  outline: none;
+  transition: border-color 200ms ease;
+}
+
+.ali-course-input:focus {
+  border-color: var(--ali-gold);
+}
+
+.ali-course-form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ali-course-form-row .ali-course-input {
+  flex: 1;
+}
+
+.ali-course-visual {
+  position: relative;
+  /* ali-v3: wraps the FlipCard3D stage now. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* FlipCard3D — perspective on the stage, preserve-3d on the inner card.
+   Matches the Framer FlipCard3D component: 1000px perspective, 600ms
+   cubic-bezier(0.4, 0, 0.2, 1) flip on hover, backface-visibility hidden
+   on both faces. */
+.ali-flip-stage {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 5 / 6;
+  perspective: 1000px;
+  cursor: pointer;
+  outline: none;
+}
+
+.ali-flip-stage:focus-visible .ali-flip-card {
+  box-shadow: 0 0 0 3px rgba(196, 151, 58, 0.45);
+  border-radius: 18px;
+}
+
+.ali-flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.ali-flip-card[data-flipped="true"] {
+  transform: rotateY(180deg);
+}
+
+.ali-flip-face {
+  position: absolute !important;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.ali-flip-face--back {
+  transform: rotateY(180deg);
+}
+
+/* ali-v3: BACK face of the flip card is WHITE — flipped colour scheme
+   from the front. Same dark-to-light card silhouette, just inverted so
+   the front reads as "the cover" and the back as "the inside spread". */
+.ali-flip-face--back.ali-course-card {
+  background:
+    linear-gradient(90deg, rgba(13, 13, 13, 0.06), transparent 14px),
+    linear-gradient(135deg, #ffffff, #faf6e8);
+  border: 1px solid rgba(196, 151, 58, 0.30);
+  color: var(--ali-ink);
+}
+.ali-flip-face--back .ali-course-card-eyebrow {
+  /* Stays gold — same accent role on both faces */
+  color: var(--ali-gold);
+}
+.ali-flip-face--back .ali-course-card-title {
+  color: var(--ali-ink);
+}
+.ali-flip-face--back .ali-course-card-tagline {
+  color: var(--ali-muted);
+}
+.ali-flip-face--back .ali-course-card-modules {
+  border-top-color: var(--ali-line);
+}
+.ali-flip-face--back .ali-course-card-modules li {
+  color: var(--ali-ink);
+}
+.ali-flip-face--back .ali-course-card-module-num {
+  color: var(--ali-gold);
+}
+.ali-flip-face--back .ali-course-card-tag {
+  color: var(--ali-gold);
+}
+
+.ali-flip-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+/* Module list on the back face — numbered rows */
+.ali-course-card-modules {
+  list-style: none;
+  margin: 0;
+  padding: 14px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ali-course-card-modules li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ali-course-card-module-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--ali-gold);
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.ali-course-card-module-title {
+  flex: 1;
+}
+
+/* Dark "tier-card style" base — used by both flip faces. Same visual
+   language as the Tier Cards' VOL. 04 (dark variant). */
+.ali-course-card {
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent 14px),
+    linear-gradient(135deg, #1f1f1f, #0a0a0a);
+  border: 1px solid rgba(196, 151, 58, 0.30);
+  border-radius: 18px;
+  padding: 32px 28px 28px;
+  color: rgba(255, 255, 255, 0.92);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow:
+    0 24px 50px -24px rgba(13, 13, 13, 0.45),
+    0 0 0 1px rgba(196, 151, 58, 0.05);
+}
+
+.ali-course-card-eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ali-gold);
+}
+
+.ali-course-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ali-course-card-tagline {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+  margin: -4px 0 0;
+}
+
+.ali-course-card-features {
+  list-style: none;
+  margin: 0;
+  padding: 18px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ali-course-card-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ali-course-card-check {
+  color: var(--ali-gold);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.ali-course-card-tag {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--ali-gold);
+  margin-top: 4px;
+}
+
+@media (max-width: 880px) {
+  .ali-course-inner { grid-template-columns: 1fr; }
+  .ali-course-visual { max-width: 100%; width: 100%; margin: 0 auto; }
+  .ali-course-card { max-width: 420px; }
+}
+
+/* ─── ali-v4: The Gap (two hands reaching, scroll-driven) ───
+   Section tall enough that the user spends ~1 full viewport of scroll
+   moving through the choreography. The inner stage is sticky-pinned so
+   the headline + hands stay locked at viewport centre while the
+   surrounding scroll drives motion.tsx's transforms.
+   Hands use mix-blend-mode: multiply as a safety net — if the user's
+   adam-hand.png has a near-white background instead of true alpha, the
+   white pixels still dissolve into the cream page bg. */
+.ali-gap {
+  position: relative;
+  width: 100%;
+  background: var(--ali-cream);
+  /* ~2.1 viewports of scroll: 1× sticky stage + 1.1× scroll runway. 30%
+     shorter than the prior 300vh so the section moves quicker — fewer
+     mouse-wheel ticks to traverse while still leaving enough runway for
+     the eased zoom + hands approach to read as deliberate motion. */
+  height: 210vh;
+  /* NO `overflow: hidden` here — combined with body's `overflow-x: hidden`,
+     some browsers scope position:sticky's scroll context to the parent box
+     instead of the document, which prevents the pin from engaging at all.
+     The stage child still clips its own overflow (so hands sliding off
+     don't bleed into other sections), and body's overflow-x already
+     contains anything that would escape horizontally. */
+  isolation: isolate;
+}
+
+.ali-gap__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ali-gap__title {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 88px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--ali-ink);
+  text-align: center;
+  max-width: min(880px, 86vw);
+  padding: 0 24px;
+  /* ali-v4: zoom-in reveal scales from 0.72 → 1; center origin so the words
+     grow outward from the middle rather than swelling from a corner. */
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.ali-gap__title em {
+  font-style: italic;
+  color: var(--ali-gold);
+}
+
+.ali-gap__hand {
+  position: absolute;
+  top: 50%;
+  /* Wider sizing for the new ~2:1 cropped hands; bigger than a single
+     vertical-hand asset because the new images include forearm and shoulder
+     so they need horizontal room to read at the meeting point. */
+  width: clamp(360px, 46vw, 760px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  transform: translateY(-50%);
+  /* The cropped hands sit on the painting's natural cream fresco
+     background — mix-blend-mode multiply dissolves that cream into the
+     site's cream page so the hands appear to float without a rectangle. */
+  mix-blend-mode: multiply;
+  will-change: transform, opacity;
+}
+
+.ali-gap__hand--left { left: 0; }
+.ali-gap__hand--right { right: 0; }
+
+@media (max-width: 768px) {
+  .ali-gap { height: 168vh; }
+  .ali-gap__title {
+    font-size: clamp(28px, 8.5vw, 48px);
+    max-width: 90vw;
+  }
+  .ali-gap__hand {
+    /* Smaller hands on mobile so they don't fully cover the headline at
+       their closest point; still meet near the centre. */
+    width: clamp(180px, 56vw, 320px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Static composition: text visible, both hands at their "meeting"
+     positions, no scroll-driven motion. */
+  .ali-gap__title { opacity: 1 !important; transform: none !important; }
+  .ali-gap__hand { opacity: 1 !important; }
+  .ali-gap__hand--left { transform: translate(-6%, -50%) scaleX(-1) !important; }
+  .ali-gap__hand--right { transform: translate(6%, -50%) !important; }
+}
+
+/* ─── Booking CTA ─── */
+.ali-booking {
+  background: var(--ali-cream);
+  position: relative;
+  padding: var(--ali-section-y) var(--ali-section-x);
+}
+
+.ali-booking-card {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) clamp(28px, 5vw, 80px);
+  background: var(--ali-white);
+  border: 1px solid var(--ali-line);
+  border-radius: var(--ali-radius-lg);
+  text-align: center;
+  box-shadow: var(--ali-shadow-md);
+  overflow: hidden;
+}
+
+.ali-booking-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, var(--ali-gold-soft), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 0% 100%, var(--ali-gold-soft), transparent 70%);
+  pointer-events: none;
+}
+
+.ali-booking-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--ali-gold-line);
+  border-style: solid;
+  border-width: 0;
+}
+
+.ali-booking-corner--tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
+.ali-booking-corner--tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+.ali-booking-corner--bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+.ali-booking-corner--br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.ali-booking h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ali-ink);
+  margin: 0 0 20px;
+  position: relative;
+}
+
+.ali-booking p {
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: var(--ali-muted);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  position: relative;
+}
+
+.ali-booking-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.ali-booking-meta {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--ali-quiet);
+  text-transform: uppercase;
+  position: relative;
+}
+
+/* â”€â”€â”€ Footer â”€â”€â”€ */
+.ali-footer {
+  background: var(--ali-white);
+  border-top: 1px solid var(--ali-gold-line);
+  padding: 56px var(--ali-section-x) 32px;
+}
+
+.ali-footer-grid {
+  max-width: var(--ali-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1fr;
+  gap: 48px;
+  align-items: start;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--ali-line);
+}
+
+.ali-footer-brand strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ali-ink);
+  letter-spacing: -0.01em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.ali-footer-brand small {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+}
+
+.ali-footer-brand p {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ali-muted);
+  max-width: 280px;
+}
+
+.ali-footer-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.ali-footer-col h6 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ali-quiet);
+  margin: 0 0 18px;
+}
+
+.ali-footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ali-footer-col a {
+  font-size: 13px;
+  color: var(--ali-ink-2);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.ali-footer-col a:hover { color: var(--ali-gold); }
+
+.ali-footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ali-footer-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ali-ink-2);
+  text-decoration: none;
+  padding: 10px 0;
+  transition: color 180ms ease;
+}
+
+.ali-footer-social a:hover { color: var(--ali-gold); }
+
+.ali-footer-bottom {
+  max-width: var(--ali-container);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  font-size: 11px;
+  color: var(--ali-quiet);
+  letter-spacing: 0.04em;
+}
+
+.ali-footer-bottom a {
+  color: var(--ali-muted);
+  text-decoration: none;
+}
+
+@media (max-width: 880px) {
+  .ali-footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ali-footer-cols { grid-template-columns: repeat(2, 1fr); }
+  .ali-footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* â”€â”€â”€ Floating WhatsApp â”€â”€â”€ */
+.ali-whatsapp-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 90;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4), 0 16px 48px rgba(13, 13, 13, 0.12);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease;
+}
+
+.ali-whatsapp-float::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.4);
+  z-index: -1;
+  animation: ali-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes ali-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0; }
+}
+
+.ali-whatsapp-float:hover {
+  transform: scale(1.08);
+}
+
+@media (max-width: 600px) {
+  .ali-whatsapp-float { width: 54px; height: 54px; bottom: 20px; right: 20px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ali-book-stage,
+  .ali-book-cover,
+  .ali-curved-card,
+  .ali-whatsapp-float::before {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ALI â€” STRATEGY COIN TAKEOVER
+   ============================================================ */
+.ali-takeover {
+  position: relative;
+  height: 260svh;
+  width: 100%;
+  z-index: 5;
+  background: linear-gradient(180deg, transparent, var(--ali-cream) 38%, var(--ali-cream));
+}
+
+.ali-takeover-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ali-coin-stage {
+  position: relative;
+  width: min(60vw, 520px);
+  aspect-ratio: 1 / 1;
+  transform-style: preserve-3d;
+  perspective: 1800px;
+}
+
+.ali-mini-coin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(220, 220, 220, 0.4) 30%, transparent 60%),
+    conic-gradient(from 220deg, #d8d8d8, #f4f4f4, #c8c8c8, #ececec, #b8b8b8, #d8d8d8);
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+    0 8px 30px rgba(13, 13, 13, 0.16),
+    0 24px 60px rgba(13, 13, 13, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ali-mini-coin::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: 1px solid rgba(13, 13, 13, 0.12);
+}
+
+.ali-mini-coin-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: rgba(13, 13, 13, 0.6);
+  text-transform: uppercase;
+}
+
+.ali-strategy-coin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(280px, 50vw, 520px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95), rgba(220, 220, 220, 0.3) 32%, transparent 64%),
+    conic-gradient(from 200deg, #c8c8c8, #f8f8f8, #b8b8b8, #ededed, #aaaaaa, #d4d4d4, #c8c8c8);
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.22),
+    0 24px 60px rgba(13, 13, 13, 0.18),
+    0 60px 120px rgba(13, 13, 13, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ali-strategy-coin::before {
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 1px solid rgba(13, 13, 13, 0.16);
+}
+
+.ali-strategy-coin::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid rgba(13, 13, 13, 0.08);
+}
+
+.ali-strategy-coin-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 6vw, 72px);
+  letter-spacing: 0.04em;
+  color: rgba(13, 13, 13, 0.78);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 760px) {
+  .ali-coin-stage { width: 76vw; }
+}
+
+/* ============================================================
+   ALI â€” BRIDGE ZIGZAG TIMELINE
+   ============================================================ */
+.ali-zigzag {
+  position: relative;
+  background: var(--ali-cream);
+  padding: clamp(60px, 8vw, 120px) var(--ali-section-x) clamp(80px, 10vw, 160px);
+}
+
+.ali-zigzag-eyebrow {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.ali-zigzag-stage {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.ali-zigzag-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ali-zigzag-path {
+  fill: none;
+  stroke: var(--ali-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ali-zigzag-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(180px, 22vw, 260px);
+  padding: 0 clamp(24px, 4vw, 48px);
+}
+
+.ali-zigzag-step--left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.ali-zigzag-step--right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.ali-zigzag-content {
+  max-width: 460px;
+  position: relative;
+}
+
+.ali-zigzag-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ali-gold);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ali-zigzag-num::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ali-gold);
+  box-shadow: 0 0 0 6px rgba(196, 151, 58, 0.16);
+}
+
+.ali-zigzag-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ali-ink);
+  margin: 0 0 14px;
+}
+
+.ali-zigzag-title em {
+  font-style: italic;
+  color: var(--ali-gold);
+}
+
+.ali-zigzag-desc {
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.65;
+  color: var(--ali-muted);
+  margin: 0;
+}
+
+.ali-zigzag-floating {
+  position: absolute;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(14px, 1.4vw, 20px);
+  font-weight: 500;
+  color: var(--ali-gold);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.68;
+}
+
+@media (max-width: 760px) {
+  .ali-zigzag-step,
+  .ali-zigzag-step--left,
+  .ali-zigzag-step--right {
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 36px;
+    padding-right: 16px;
+    min-height: 180px;
+  }
+  .ali-zigzag-floating { display: none; }
+}
+
+/* ============================================================
+   ALI â€” VALUE PILLARS (Strategy / Governance / Execution)
+   ============================================================ */
+.ali-pillars {
+  position: relative;
+  background: var(--ali-white);
+  padding: var(--ali-section-y) var(--ali-section-x);
+  overflow: hidden;
+}
+
+.ali-pillars-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 64px;
+}
+
+.ali-pillars-stage {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 11;
+}
+
+.ali-pillar-coin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 14% 6% 6%;
+  text-align: center;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.6), rgba(196, 151, 58, 0.04) 35%, rgba(13, 13, 13, 0.02) 70%),
+    rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--ali-gold-line);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.8),
+    0 12px 40px rgba(13, 13, 13, 0.06);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms ease, border-color 400ms ease;
+  cursor: default;
+}
+
+.ali-pillar-coin:hover {
+  border-color: var(--ali-gold);
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.8),
+    0 16px 50px rgba(196, 151, 58, 0.18);
+  z-index: 5;
+}
+
+.ali-pillar-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ali-gold);
+  margin-bottom: 8px;
+}
+
+.ali-pillar-name {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ali-ink);
+  margin-bottom: 10px;
+  line-height: 1.05;
+}
+
+.ali-pillar-role {
+  font-size: clamp(11px, 0.9vw, 13px);
+  color: var(--ali-muted);
+  line-height: 1.5;
+  max-width: 80%;
+}
+
+.ali-pillar-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 4;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.ali-pillar-center-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ali-white);
+  background: var(--ali-ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.ali-pillar-center-line {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 500;
+  color: var(--ali-ink);
+  line-height: 1.3;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .ali-pillars-stage {
+    aspect-ratio: auto;
+    height: 600px;
+  }
+  .ali-pillar-coin {
+    width: 60%;
+  }
+  .ali-pillar-role { font-size: 10px; }
+}
+
+/* ============================================================
+   ALI â€” CINEMATIC FOOTER (curtain reveal + GSAP magnetic pills)
+   ============================================================ */
+/* ─── ali-v3 sticky footer (replaces .ali-cinematic-*) ──────────────────
+   Scroll-triggered sticky reveal: outer wrapper has clip-path so the
+   sticky panel beneath only shows inside its viewport-bound box. */
+.ali-sf-wrap {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  clip-path: polygon(0% 0, 100% 0%, 100% 100%, 0 100%);
+}
+
+.ali-sf-rail {
+  position: relative;
+  height: calc(100vh + 70vh);
+  top: -100vh;
+}
+
+.ali-sf-sticky {
+  height: 70vh;
+  position: sticky;
+  top: calc(100vh - 70vh);
+}
+
+.ali-sf {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* Same cool-cream as the rest of the site (var(--ali-cream) = #F8F6F2)
+     with a barely-perceptible soft gradient for depth — no warm/yellow
+     tint. Was #f8f3e3 → #ece2c8 → #f5efde which read as yellow. */
+  background:
+    linear-gradient(180deg, rgba(13, 13, 13, 0.03), transparent 30%),
+    linear-gradient(135deg, var(--ali-cream) 0%, #f1efe9 100%);
+  color: var(--ali-ink);
+  padding: clamp(24px, 4vw, 56px) clamp(20px, 5vw, 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  font-family: var(--font-display);
+}
+
+.ali-sf-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(248, 246, 242, 0.4), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ali-sf-orb {
+  position: absolute;
+  width: clamp(220px, 30vw, 400px);
+  height: clamp(220px, 30vw, 400px);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Orbs now use a neutral cool-ink wash instead of gold — keeps the
+   "atmosphere" effect without the warm yellow cast. */
+.ali-sf-orb--tr {
+  top: -10%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(13, 13, 13, 0.06) 0%, transparent 70%);
+}
+
+.ali-sf-orb--bl {
+  bottom: -10%;
+  left: -8%;
+  background: radial-gradient(circle, rgba(13, 13, 13, 0.04) 0%, transparent 70%);
+}
+
+/* ── Nav grid ── */
+.ali-sf-nav {
+  position: relative;
+  z-index: 1;
+}
+
+.ali-sf-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 3vw, 40px) clamp(20px, 4vw, 80px);
+}
+
+@media (min-width: 768px) {
+  .ali-sf-nav-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.ali-sf-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ali-sf-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+  border-bottom: 1px solid var(--ali-line);
+  padding-bottom: 6px;
+  margin: 0 0 8px;
+  transition: color 300ms ease;
+}
+
+.ali-sf-link {
+  font-size: 13px;
+  color: var(--ali-muted);
+  text-decoration: none;
+  position: relative;
+  width: fit-content;
+  transition: color 300ms ease;
+}
+
+.ali-sf-link:hover {
+  color: var(--ali-ink);
+}
+
+.ali-sf-link-label {
+  position: relative;
+  display: inline-block;
+}
+
+.ali-sf-link-underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 1.5px;
+  background: var(--ali-gold);
+  display: block;
+}
+
+/* ── Bottom row ── */
+.ali-sf-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: clamp(24px, 4vw, 56px);
+}
+
+@media (min-width: 768px) {
+  .ali-sf-bottom {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 32px;
+  }
+}
+
+.ali-sf-bottom-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.ali-sf-title {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 12vw, 144px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+    var(--ali-ink) 0%,
+    var(--ali-muted) 60%,
+    rgba(13, 13, 13, 0.4) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: default;
+  margin: 0;
+  user-select: none;
+}
+
+.ali-sf-subtitle-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.ali-sf-rule {
+  width: clamp(32px, 5vw, 56px);
+  height: 2px;
+  background: linear-gradient(90deg, var(--ali-gold), rgba(196, 151, 58, 0.3));
+  border-radius: 2px;
+  transform-origin: left center;
+}
+
+.ali-sf-subtitle {
+  font-size: 13px;
+  color: var(--ali-muted);
+  margin: 0;
+  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+}
+
+.ali-sf-bottom-right {
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .ali-sf-bottom-right {
+    text-align: right;
+    /* Pull the social pills + copyright in from the right edge so the
+       fixed WhatsApp float button doesn't sit on top of them on desktop. */
+    padding-right: clamp(60px, 7vw, 96px);
+  }
+}
+
+.ali-sf-copyright {
+  font-size: 11px;
+  color: var(--ali-muted);
+  margin: 0 0 12px;
+  letter-spacing: 0.04em;
+}
+
+.ali-sf-social-row {
+  display: flex;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .ali-sf-social-row {
+    justify-content: flex-end;
+  }
+}
+
+.ali-sf-social {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(196, 151, 58, 0.12);
+  border: 1px solid rgba(196, 151, 58, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ali-gold);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+
+.ali-sf-social:hover {
+  background: var(--ali-gold);
+  color: var(--ali-cream);
+  border-color: var(--ali-gold);
+}
+
+/* ─── Legacy cinematic footer styles (kept so older branches that still
+       reference .ali-cinematic-* don't break — V1 + V2 use them). ─── */
+.ali-cinematic-wrap {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  /* Curtain — content underneath only visible inside */
+  clip-path: polygon(0% 0, 100% 0%, 100% 100%, 0 100%);
+}
+
+.ali-cinematic {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  background: var(--ali-cream);
+  color: var(--ali-ink);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ali-cinematic-aurora {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  height: 60vh;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  filter: blur(80px);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(196, 151, 58, 0.22) 0%,
+    rgba(196, 151, 58, 0.10) 40%,
+    transparent 70%
+  );
+  opacity: 0.6;
+  animation: ali-cinematic-breathe 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes ali-cinematic-breathe {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.55; }
+  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+
+.ali-cinematic-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, rgba(13, 13, 13, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13, 13, 13, 0.04) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+}
+
+.ali-cinematic-giant {
+  position: absolute;
+  bottom: -5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 26vw;
+  line-height: 0.75;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(13, 13, 13, 0.06);
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.10) 0%, transparent 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+.ali-cinematic-marquee {
+  position: absolute;
+  top: 9%;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  border-block: 1px solid rgba(13, 13, 13, 0.08);
+  background: rgba(248, 246, 242, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 14px 0;
+  z-index: 2;
+  transform: rotate(-2deg) scale(1.1);
+  box-shadow: 0 24px 48px rgba(13, 13, 13, 0.06);
+}
+
+.ali-cinematic-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ali-cinematic-scroll 40s linear infinite;
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--ali-muted);
+  text-transform: uppercase;
+}
+
+.ali-cinematic-marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 0 24px;
+  white-space: nowrap;
+}
+
+.ali-cinematic-marquee-item span {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ali-cinematic-marquee-item i {
+  font-style: normal;
+  color: var(--ali-gold);
+}
+
+@keyframes ali-cinematic-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ali-cinematic-center {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 64px 24px 0;
+  text-align: center;
+}
+
+/* ali-v3: matches the .ali-h2 treatment used everywhere else on the site —
+   solid ink serif with a gold italic accent — instead of the previous
+   gradient-text fade-out which was unique to the footer and made it look
+   like a different design system. */
+.ali-cinematic-heading {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0 0 40px;
+  color: var(--ali-ink);
+}
+
+.ali-cinematic-heading em {
+  color: var(--ali-gold);
+  font-style: italic;
+  font-weight: 700;
+}
+
+.ali-cinematic-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.ali-cinematic-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ali-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  border-radius: 999px;
+  font-size: clamp(13px, 1vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ali-ink);
+  text-decoration: none;
+  cursor: pointer;
+  background: linear-gradient(145deg,
+    rgba(13, 13, 13, 0.04) 0%,
+    rgba(13, 13, 13, 0.01) 100%);
+  border: 1px solid rgba(13, 13, 13, 0.08);
+  box-shadow:
+    0 10px 30px -10px rgba(248, 246, 242, 0.6),
+    inset 0 1px 1px rgba(13, 13, 13, 0.06),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.ali-pill:hover {
+  background: linear-gradient(145deg,
+    rgba(196, 151, 58, 0.10) 0%,
+    rgba(196, 151, 58, 0.02) 100%);
+  border-color: rgba(196, 151, 58, 0.5);
+  box-shadow:
+    0 20px 40px -10px rgba(13, 13, 13, 0.10),
+    inset 0 1px 1px rgba(196, 151, 58, 0.18);
+}
+
+.ali-pill--muted {
+  font-size: 12px;
+  padding: 10px 20px;
+  color: var(--ali-muted);
+}
+
+.ali-pill--muted:hover { color: var(--ali-ink); }
+
+.ali-pill svg { color: var(--ali-muted); }
+.ali-pill:hover svg { color: var(--ali-gold); }
+
+.ali-cinematic-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 0 clamp(20px, 4vw, 48px) clamp(20px, 3vw, 32px);
+}
+
+.ali-cinematic-credit {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+}
+
+.ali-cinematic-back {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ali-muted);
+  background: linear-gradient(145deg,
+    rgba(13, 13, 13, 0.04) 0%,
+    rgba(13, 13, 13, 0.01) 100%);
+  border: 1px solid rgba(13, 13, 13, 0.08);
+  cursor: pointer;
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ali-cinematic-back:hover {
+  color: var(--ali-gold);
+  border-color: var(--ali-gold);
+  transform: translateY(-2px);
+}
+
+.ali-cinematic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(13, 13, 13, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.ali-cinematic-badge strong {
+  color: var(--ali-ink);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .ali-cinematic-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+  .ali-cinematic-marquee { top: 13%; }
+  .ali-cinematic-center { padding-top: 30%; }
+}
+
+/* ============================================================
+   ALI NOVA TRANSITION — scroll-pin container
+   (Three.js coins do all the visual work via window.__aliNovaProgress)
+   ============================================================ */
+
+.ali-nova-transition {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100vh;
+  background: transparent;
+}
+
+/* ============================================================
+   ALI TIMELINE — premium scroll timeline (Framer-style)
+   ============================================================ */
+
+.ali-timeline {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  background: var(--ali-cream, #f8f6f2);
+  padding: 0 0 12vh;
+}
+
+.ali-tl-head {
+  text-align: center;
+  padding: 14vh 5vw 8vh;
+}
+
+.ali-tl-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ali-gold, #c4973a);
+  margin-bottom: 1.4rem;
+}
+
+.ali-tl-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--ali-ink, #0d0d0d);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── Track (line + cards) ──────────────────────────────────── */
+
+.ali-tl-track {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 5vw 6vh;
+}
+
+/* SVG line */
+.ali-tl-svg {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ali-tl-path {
+  stroke: var(--ali-gold, #c4973a);
+  stroke-width: 1.5;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+
+/* ── Cards ─────────────────────────────────────────────────── */
+
+.ali-tl-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ali-tl-item {
+  display: flex;
+  align-items: center;
+  min-height: 26vh;
+  padding: 5vh 0;
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.ali-tl-item--left {
+  justify-content: flex-end;
+  padding-right: calc(50% + 3.5rem);
+}
+
+.ali-tl-item--right {
+  justify-content: flex-start;
+  padding-left: calc(50% + 3.5rem);
+}
+
+.ali-tl-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem 2.2rem;
+  max-width: 380px;
+  width: 100%;
+  box-shadow:
+    0 2px 12px rgba(13, 13, 13, 0.06),
+    0 1px 3px rgba(13, 13, 13, 0.04);
+  border: 1px solid rgba(13, 13, 13, 0.055);
+}
+
+.ali-tl-num {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ali-gold, #c4973a);
+  margin-bottom: 0.65rem;
+}
+
+.ali-tl-card-title {
+  font-size: clamp(1rem, 1.6vw, 1.22rem);
+  font-weight: 700;
+  color: var(--ali-ink, #0d0d0d);
+  line-height: 1.3;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.015em;
+}
+
+.ali-tl-card-body {
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  color: var(--ali-muted, #6b6b6b);
+  line-height: 1.7;
+}
+
+/* ── Dot on the line at each card ─────────────────────────── */
+
+.ali-tl-dot {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ali-gold, #c4973a);
+  box-shadow: 0 0 0 4px rgba(196, 151, 58, 0.18);
+  opacity: 0;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .ali-tl-item--left,
+  .ali-tl-item--right {
+    justify-content: flex-start;
+    padding-left: 2.5rem;
+    padding-right: 0;
+  }
+
+  .ali-tl-svg { display: none; }
+
+  .ali-tl-card { max-width: 100%; }
+}
+
+/* ─── ali-v5: AI in Strategy Execution ─────────────────────────────
+   Editorial showcase of four AI-augmented strategy frameworks. Each
+   card pairs a brief blurb with a CSS-only specimen mock (no stock
+   imagery) so the section reads as part of the site's design system. */
+.ali-ai {
+  background: var(--ali-cream);
+  padding: var(--ali-section-y) var(--ali-section-x);
+}
+
+.ali-ai-head {
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto 72px;
+}
+
+.ali-ai-title {
+  max-width: 780px;
+  margin: 14px auto 18px;
+}
+
+.ali-ai-lede {
+  margin: 0 auto;
+  color: var(--ali-muted);
+  max-width: 600px;
+}
+
+.ali-ai-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  max-width: var(--ali-container);
+  margin: 0 auto;
+}
+
+.ali-ai-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--ali-white);
+  border: 1px solid var(--ali-line);
+  border-radius: var(--ali-radius-lg);
+  padding: 32px 32px 28px;
+  box-shadow: var(--ali-shadow-sm);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ali-ai-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ali-shadow-md);
+}
+
+.ali-ai-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.ali-ai-card-index {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ali-gold);
+}
+
+.ali-ai-card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ali-ink);
+}
+
+.ali-ai-card-specimen {
+  position: relative;
+  flex: 1;
+  min-height: 168px;
+  border-radius: var(--ali-radius);
+  background: linear-gradient(180deg, rgba(98, 182, 203, 0.05), rgba(98, 182, 203, 0.02));
+  border: 1px solid var(--ali-line);
+  padding: 18px;
+  overflow: hidden;
+}
+
+.ali-ai-card-blurb {
+  margin: 0;
+  color: var(--ali-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ── Specimen 01: Strategy Prompts — terminal-style block ── */
+.ali-ai-mock--prompts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+.ali-ai-prompt-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ali-ai-prompt-caret {
+  color: var(--ali-gold);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ali-ai-prompt-text {
+  color: var(--ali-ink);
+  letter-spacing: -0.005em;
+}
+.ali-ai-prompt-text--out {
+  color: var(--ali-gold);
+  font-weight: 600;
+}
+
+/* ── Specimen 02: OGSM — 4-row labelled stack ── */
+.ali-ai-mock--ogsm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ali-ai-ogsm-row {
+  display: grid;
+  grid-template-columns: 22px 90px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--ali-line);
+}
+.ali-ai-ogsm-row:last-child {
+  border-bottom: none;
+}
+.ali-ai-ogsm-key {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ali-gold);
+  text-align: center;
+}
+.ali-ai-ogsm-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+}
+.ali-ai-ogsm-sample {
+  font-size: 13px;
+  color: var(--ali-ink);
+  line-height: 1.3;
+}
+
+/* ── Specimen 03: SWOT — 2×2 quadrant grid ── */
+.ali-ai-mock--swot {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  height: 100%;
+  min-height: 140px;
+}
+.ali-ai-swot-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--ali-line);
+  background: var(--ali-cream);
+}
+.ali-ai-swot-cell--pos { border-color: var(--ali-gold-line); }
+.ali-ai-swot-cell--neg { border-color: var(--ali-line-strong); }
+.ali-ai-swot-key {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ali-gold);
+}
+.ali-ai-swot-cell--neg .ali-ai-swot-key { color: var(--ali-muted); }
+.ali-ai-swot-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ali-muted);
+  margin-top: -4px;
+}
+.ali-ai-swot-bars {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+.ali-ai-swot-bars span {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ali-gold-soft);
+  flex: 1;
+}
+.ali-ai-swot-bars span:nth-child(2) { flex: 0.7; }
+.ali-ai-swot-bars span:nth-child(3) { flex: 0.4; opacity: 0.55; }
+.ali-ai-swot-cell--neg .ali-ai-swot-bars span {
+  background: var(--ali-line-strong);
+}
+
+/* ── Specimen 04: Advisory Council — 4 avatar seats ── */
+.ali-ai-mock--council {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  align-content: center;
+}
+.ali-ai-council-seat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ali-ai-council-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--ali-gold-soft);
+  color: var(--ali-gold);
+  border: 1px solid var(--ali-gold-line);
+}
+.ali-ai-council-role {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--ali-ink);
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 880px) {
+  .ali-ai-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .ali-ai-card {
+    padding: 26px 22px 22px;
+  }
+}
+
+/* ─── Tier Cards (branch-2 — pricing-style replacement for Core Products + Course) ─── */
+.ali-tiers {
+  background: var(--ali-cream);
+  padding: clamp(80px, 9vw, 140px) clamp(20px, 5vw, 96px);
+}
+
+.ali-tiers-grid {
+  display: grid;
+  /* ali-v3: 4 → 3 columns now that the Course card moved to its own
+     section below. */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+@media (max-width: 1120px) {
+  .ali-tiers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ali-tiers-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+}
+
+.ali-tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  padding: 28px 24px 24px;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 360ms ease,
+    border-color 360ms ease;
+  text-align: left;
+  min-height: 100%;
+}
+
+.ali-tier--light {
+  background: #ffffff;
+  border: 1px solid var(--ali-line);
+  color: var(--ali-ink);
+  box-shadow: 0 1px 0 rgba(20, 20, 30, 0.02);
+}
+
+.ali-tier--dark {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent 14px),
+    linear-gradient(135deg, #1f1f1f, #0a0a0a);
+  border: 1px solid rgba(196, 151, 58, 0.25);
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 40px -20px rgba(13, 13, 13, 0.4);
+}
+
+.ali-tier--highlight {
+  border: 1.5px solid var(--ali-gold);
+  box-shadow:
+    0 0 0 4px rgba(196, 151, 58, 0.08),
+    0 18px 40px -22px rgba(196, 151, 58, 0.35);
+  transform: translateY(-6px);
+}
+
+.ali-tier:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px -22px rgba(13, 13, 13, 0.25);
+}
+
+.ali-tier--highlight:hover {
+  transform: translateY(-10px);
+}
+
+.ali-tier-pin {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  background: var(--ali-gold);
+  color: #1a1a1a;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ali-tier-head { margin-bottom: 22px; }
+
+.ali-tier-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  margin-bottom: 14px;
+}
+
+.ali-tier-eyebrow--neutral { color: var(--ali-quiet); }
+.ali-tier-eyebrow--gold,
+.ali-tier-eyebrow--dot {
+  color: var(--ali-gold);
+}
+
+.ali-tier--dark .ali-tier-eyebrow--neutral { color: rgba(255, 255, 255, 0.55); }
+
+.ali-tier-title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: inherit;
+}
+
+.ali-tier-tagline {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ali-muted);
+  margin: 0;
+}
+
+.ali-tier--dark .ali-tier-tagline { color: rgba(255, 255, 255, 0.65); }
+
+.ali-tier-features {
+  list-style: none;
+  margin: 0 0 26px;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--ali-line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.ali-tier--dark .ali-tier-features {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.ali-tier-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: inherit;
+}
+
+.ali-tier-check {
+  color: var(--ali-gold);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.ali-tier-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.ali-tier-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.ali-tier-tag--neutral { color: var(--ali-quiet); }
+.ali-tier-tag--gold { color: var(--ali-gold); }
+.ali-tier-tag--dot { color: var(--ali-gold); }
+.ali-tier--dark .ali-tier-tag--neutral { color: rgba(255, 255, 255, 0.5); }
+
+.ali-tier-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--ali-ink);
+  color: var(--ali-cream);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 240ms ease, transform 240ms ease;
+}
+
+.ali-tier-cta:hover {
+  background: #000;
+  transform: translateX(2px);
+}
+
+.ali-tier--dark .ali-tier-cta {
+  background: var(--ali-gold);
+  color: #1a1a1a;
+}
+
+.ali-tier--dark .ali-tier-cta:hover {
+  background: #d8a94a;
+}
+
+.ali-tier-email {
+  display: flex;
+  gap: 6px;
+}
+
+.ali-tier-email input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.ali-tier-email input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.ali-tier-email input:focus {
+  border-color: rgba(196, 151, 58, 0.6);
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.ali-tier-email button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: var(--ali-gold);
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 200ms ease;
+}
+
+.ali-tier-email button:hover { background: #d8a94a; }
+
+.ali-tier-submitted {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(196, 151, 58, 0.12);
+  border: 1px solid rgba(196, 151, 58, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ─── Flow Testimonials (branch-2 — infinite marquee, two opposite rows) ─── */
+.ali-flow-tm {
+  position: relative;
+  background: var(--ali-cream);
+  padding: clamp(80px, 9vw, 140px) 0;
+  overflow: hidden;
+}
+
+.ali-flow-tm-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 64px;
+  /* Gradient edge masks so cards fade in/out at the section edges instead
+     of hard-cropping. Same colour as section background. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 80px,
+    #000 calc(100% - 80px),
+    transparent 100%
+  );
+          mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 80px,
+    #000 calc(100% - 80px),
+    transparent 100%
+  );
+}
+
+.ali-flow-tm-track {
+  overflow: hidden;
+  /* Touch interaction: drag-scroll the row horizontally on touch devices.
+     We don't wire JS drag — letting the native overflow handle it keeps
+     the animation simple. */
+}
+
+.ali-flow-tm-marquee {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  will-change: transform;
+}
+
+.ali-flow-tm-marquee--left {
+  animation: ali-flow-tm-left 60s linear infinite;
+}
+.ali-flow-tm-marquee--right {
+  animation: ali-flow-tm-right 70s linear infinite;
+}
+
+/* Pause the marquee on hover so visitors can actually read a card */
+.ali-flow-tm-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ali-flow-tm-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes ali-flow-tm-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Card ── */
+.ali-flow-tm-card {
+  flex: 0 0 auto;
+  width: clamp(280px, 30vw, 380px);
+  margin: 0;
+  padding: 26px 24px 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid var(--ali-line);
+  box-shadow: 0 4px 14px -8px rgba(20, 20, 40, 0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+.ali-flow-tm-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(196, 151, 58, 0.4);
+  box-shadow:
+    0 12px 28px -10px rgba(196, 151, 58, 0.18),
+    0 4px 14px -8px rgba(20, 20, 40, 0.12);
+}
+
+.ali-flow-tm-stars {
+  display: flex;
+  gap: 3px;
+  color: var(--ali-gold);
+}
+
+.ali-flow-tm-quote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ali-ink);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  /* Cap each card's text length visually — overflow with ellipsis if a
+     quote happens to be unusually long. */
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ali-flow-tm-attr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ali-line);
+}
+
+.ali-flow-tm-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(196, 151, 58, 0.18);
+  border: 1px solid rgba(196, 151, 58, 0.35);
+  color: var(--ali-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.ali-flow-tm-name {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ali-ink);
+  line-height: 1.2;
+}
+
+.ali-flow-tm-org {
+  font-size: 11.5px;
+  color: var(--ali-muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+  .ali-flow-tm-card {
+    width: clamp(260px, 80vw, 320px);
+    padding: 22px 20px 18px;
+  }
+  .ali-flow-tm-marquee--left  { animation-duration: 45s; }
+  .ali-flow-tm-marquee--right { animation-duration: 55s; }
+}
+
+/* Respect users who prefer reduced motion — pause the marquee */
+@media (prefers-reduced-motion: reduce) {
+  .ali-flow-tm-marquee--left,
+  .ali-flow-tm-marquee--right {
+    animation: none;
+  }
+}

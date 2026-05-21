@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left reaching hand">
+  <defs>
+    <linearGradient id="skinLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7d9b2"/>
+      <stop offset="45%" stop-color="#e4b67f"/>
+      <stop offset="100%" stop-color="#c98a5d"/>
+    </linearGradient>
+    <linearGradient id="shadowLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#skinLeft)" d="M84 310 C80 242 84 188 110 152 C132 124 164 108 190 110 C210 112 226 124 238 142 C252 162 260 186 262 216 C264 246 260 278 252 310 C248 332 242 356 232 380 C212 430 176 466 124 494 C116 500 104 494 100 486 C90 462 88 420 84 310 Z"/>
+  <path fill="url(#skinLeft)" d="M218 104 C228 92 246 86 264 92 C284 98 296 116 294 138 C292 164 286 190 282 214 C276 240 268 270 260 302 C246 280 234 254 224 226 C214 198 208 166 204 132 C202 118 202 108 218 104 Z" opacity="0.95"/>
+  <path fill="url(#shadowLeft)" d="M90 316 C96 290 104 266 116 244 C126 224 138 204 154 186 C170 168 190 154 210 146 C226 138 242 136 258 146 C274 156 286 176 292 196 C296 212 294 230 290 250 C286 272 278 298 270 326 C262 350 250 374 234 396 C224 410 210 424 196 432 C186 438 172 444 158 444 C138 444 118 432 104 410 C96 398 92 380 90 364 C88 350 88 332 90 316 Z" opacity="0.28"/>
+</svg>
